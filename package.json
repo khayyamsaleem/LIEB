@@ -1,0 +1,11 @@
+{
+  "name": "live-electronic-breakroom",
+  "version": "1.0.0",
+  "description": "A social media website that provides users with the ability to post stuff, have profiles, and send messages.",
+  "main": "index.js",
+  "scripts": {
+    "test": "node test.js"
+  },
+  "author": "Jason Gardella, Christopher Hittner, Khayyam Saleem, Robyn Verrill, Brendan Von Hofe",
+  "license": "ISC"
+}
