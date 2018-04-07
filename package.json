@@ -7,5 +7,11 @@
     "test": "node test.js"
   },
   "author": "Jason Gardella, Christopher Hittner, Khayyam Saleem, Robyn Verrill, Brendan Von Hofe",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.16.3",
+    "handlebars": "^4.0.11",
+    "mongodb": "^3.0.5",
+    "uuid": "^3.2.1"
+  }
 }
