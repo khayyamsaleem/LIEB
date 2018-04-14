@@ -1,0 +1,15 @@
+<header class="signup_header">
+  <h1>Signup</h1>
+</header>
+<main class="signup_content">
+  <form id="signup-form">
+    <label for="usernameInput">Username:</label>
+    <input id="usernameInput" type="text" name="username" />
+    <label for="passwordInput">Password:</label>
+    <input id="passwordInput" type="password" name="password" />
+    <input type="submit" value="Sign up" />
+  </form>
+  {{#if error }}
+    <p>Error: {{error}}</p>
+  {{/if}}
+</main>

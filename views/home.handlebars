@@ -1,0 +1,28 @@
+<header class="home_header">
+  <img class="user_picture" src="{{ user.picture}}" alt="{{ user.username }} profile picture">
+  <h1 class="user_info">{{ user.username }}</h1>
+</header>
+<main class="home_content">
+  <ol id="post_list">
+    {{ #each posts }}
+        <li>
+          <div class="post">
+            <h2 class="post_title">{{ this.title }}</h2>
+            <p class="post_metadata">posted by {{ this.poster }} at {{ this.post_time }}</p>
+            <p class="post_updated">last updated at {{ this.update_time }}</p>
+            <p class="post_content">{{ this.content }}</p>
+            <ol class="reactions">
+              {{ #each this.reactions }}
+                <li><p class="reaction">{{ this.name }} - {{ this.count }}</p></li>
+              {{ /each }}
+            </ol>
+            <ol class="attachments">
+              {{ #each this.attachments }}
+                <li><img class = "attachment" src="{{ this.source }}" alt="{{ this.alt }}"></li>
+              {{ /each }}
+            </ol>
+          </div>
+        </li>
+    {{ /each }}
+  </ol>
+</main>
