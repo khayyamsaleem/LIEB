@@ -1,29 +1,80 @@
+const users = require("../users");
+const posts = require("../posts");
+const messages = require("../messages");
+
+const requireLoginMiddleware = (req, res, next) => {
+  if (req.currentUser) {
+    next();
+  } else {
+    res.redirect("/login");
+  }
+};
+
+const requireNoLoginMiddleware = (req, res, next) => {
+  if (req.currentUser) {
+    res.redirect("/home");
+  } else {
+    next();
+  }
+};
+
 module.exports = app => {
 
+  app.use("/login", "/signup",
+    requireNoLoginMiddleware);
+  app.use("/signup", "/", "/messages/:username", "/users/:username",
+    requreLoginMiddleware);
+
   app.get("/login", (req, res) => {
-    // TODO: Provide login page
     res.render("login");
   });
 
+  app.post("/login", async (req, res) => {
+    const sessionId = await users.loginUser(req.body.username, req.body.password);
+    if (sessionId) {
+      res
+        .cookie("AuthCookie", sessionId)
+        .redirect("/");
+    } else {
+      res.render("login", { error: "Invalud username/password provided" });
+    }
+  });
+
   app.get("/signup", (req, res) => {
-    // TODO: Provide signup page
-    res.render("signup");
+    res.render("signup")
   });
 
   app.get("/", function (req, res) {
-    // TODO: Provide the homepage, show posts
-    res.render("home");
+    const posts = posts.getPostsBySubscriptions(req.currentUser.subscriptions);
+    res.render("home", {
+      user: req.currentUser,
+      posts: posts
+    });
   });
 
-  app.get("/messages/:username", function (req, res) {
-    // TODO: Provide messages between the currently logged in user,
-    // and the user in the params.
-    res.render("messages");
+  app.get("/messages/:username", async (req, res) => {
+    const messages = messages.getMessagesConcerningUsers(req.currentUser, req.params.username);
+    const otherUser = users.getUser(req.params.username);
+    res.render("messages", {
+      user: req.params.currentUser,
+      other_user: req.params.otherUser,
+      messages: messages
+    });
   });
 
-  app.get("/users/:username", function (req, res) {
-    // TODO: Respond with the user's profile iff it exists
-    res.render("profile");
+  app.get("/users/:username", async (req, res) => {
+    try {
+      const user = users.getUser(req.params.username);
+      const isCurrentUser = user.username === req.params.currentUser.username);
+      res.render("profile", {
+        user: user
+        isCurrentUser: isCurrentUser,
+      });
+    } catch (e) {
+      res.render("profile", {
+        missingUser: req.params.username
+      });
+    }
   });
 
 }

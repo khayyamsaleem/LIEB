@@ -1,25 +1,34 @@
-<header class="profile_header">
-  <h1>Profile - {{user.username}}</h1>
-</header>
-<main class="profile_content"
-  <section id="change-password-section">
-    <h2>Change Password</h2>
-    <form id="change-password-form">
-      <label for="currentPasswordInput">Current Password:</label>
-      <input id="currentPasswordInput" type="password" name="currentPassword" />
-      <label for="newPasswordInput">New Password:</label>
-      <input id="newPasswordInput" type="password" name="newPassword" />
-      <label for="newPasswordAgainInput">New Password Again:</label>
-      <input id="newPasswordAgainInput" type="password" name="newPasswordAgain" />
-      <input type="submit" value="Update" />
-    </form>
-  </section>
-  <section id="change-picture-section">
-    <h2>Change Profile Picture</h2>
-    <form id="change-profile-picture">
-      <label for="profilePictureInput">New Profile Picture:</label>
-      <input id="profilePictureInput" type="file" />
-      <input type="submit" value="Update" />
-    </form>
-  </section>
-</main>
+{{ #if user }}
+  <header class="profile_header">
+    <h1>Profile - {{user.username}}</h1>
+  </header>
+  <main class="profile_content"
+    <section id="change-password-section">
+      <h2>Change Password</h2>
+      <form id="change-password-form">
+        <label for="currentPasswordInput">Current Password:</label>
+        <input id="currentPasswordInput" type="password" name="currentPassword" />
+        <label for="newPasswordInput">New Password:</label>
+        <input id="newPasswordInput" type="password" name="newPassword" />
+        <label for="newPasswordAgainInput">New Password Again:</label>
+        <input id="newPasswordAgainInput" type="password" name="newPasswordAgain" />
+        <input type="submit" value="Update" />
+      </form>
+    </section>
+    <section id="change-picture-section">
+      <h2>Change Profile Picture</h2>
+      <form id="change-profile-picture">
+        <label for="profilePictureInput">New Profile Picture:</label>
+        <input id="profilePictureInput" type="file" />
+        <input type="submit" value="Update" />
+      </form>
+    </section>
+  </main>
+{{ else }}
+  <header class="profile_header">
+    <h1>Profile - {{missingUser}}</h1>
+  </header>
+  <main class="profile_content"
+    <p>No user {{ missingUser }}</p>
+  </main>
+{{ /if}}
