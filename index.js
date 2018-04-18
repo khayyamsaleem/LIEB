@@ -2,7 +2,7 @@ const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
 const exphbs = require("express-handlebars");
-const static = express.static(___dirname + "/public");
+const static = express.static(__dirname + "/public");
 
 const configRoutes = require("./routes");
 const auth = require("./auth");
