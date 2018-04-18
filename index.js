@@ -7,6 +7,8 @@ const static = express.static(__dirname + "/public");
 const configRoutes = require("./routes");
 const auth = require("./auth");
 
+const port = 3000;
+
 app.use(auth);
 
 app.use("/public", static);
@@ -21,6 +23,6 @@ app.use(bodyParser.urlencoded({
 
 configRoutes(app);
 
-app.listen(3000, () => {
-    console.log("Lieb is running!");
+app.listen(port, () => {
+    console.log(`Lieb is running on port ${port}!`);
 });

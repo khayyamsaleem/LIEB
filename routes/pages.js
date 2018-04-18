@@ -41,6 +41,51 @@ module.exports = app => {
     res.render("signup")
   });
 
+  app.post("/signup", async (req, res) => {
+    const username = req.body.username;
+    const password = req.body.password;
+    const passwordConfirm = req.body.passwordConfirm;
+
+    const errors = [];
+
+    if (username === undefined || username === "") {
+      errors.push('Username must be provided');
+    }
+
+    if (password === undefined || password === "") {
+      errors.push('Password must be provided');
+    }
+
+    if (passwordConfirm === undefined || passwordConfirm === "") {
+      errors.push('Password confirmation must be provided');
+    }
+
+    if (password && passwordConfirm && password !== "" && passwordConfirm !== ""
+      && password !== passwordConfirm) {
+      errors.push('Password must match password confirmation');
+    }
+
+    if (errors.length > 0) {
+      res.render("signup", {
+        errors: errors
+      })
+    } else {
+      try {
+        const userToCreate = {
+          username: username,
+          password: password
+        };
+
+        const createdUser = await users.createUser(userToCreate);
+        res.redirect("/");
+      } catch (e) {
+        res.render("signup", {
+          errors: [`Failed to create user, error: ${e}`]
+        });
+      }
+    }
+  });
+
   app.use("/", requireLoginMiddleware);
   app.get("/", function (req, res) {
     const posts = posts.getPostsBySubscriptions(req.currentUser.subscriptions);
@@ -49,6 +94,16 @@ module.exports = app => {
       posts: posts
     });
   });
+
+  app.use("/", requireLoginMiddleware);
+  app.get("/", function (req, res) {
+    const posts = posts.getPostsBySubscriptions(req.currentUser.subscriptions);
+    res.render("home", {
+      user: req.currentUser,
+      posts: posts
+    });
+  });
+
 
   app.use("/messages/:username", requireLoginMiddleware);
   app.get("/messages/:username", async (req, res) => {
