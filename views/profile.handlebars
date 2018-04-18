@@ -1,4 +1,4 @@
-{{ #if user }}
+{{#if user}}
   <header class="profile_header">
     <h1>Profile - {{user.username}}</h1>
   </header>
@@ -24,11 +24,11 @@
       </form>
     </section>
   </main>
-{{ else }}
+{{else}}
   <header class="profile_header">
     <h1>Profile - {{missingUser}}</h1>
   </header>
   <main class="profile_content"
     <p>No user {{ missingUser }}</p>
   </main>
-{{ /if}}
+{{/if}}

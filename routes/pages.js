@@ -95,16 +95,6 @@ module.exports = app => {
     });
   });
 
-  app.use("/", requireLoginMiddleware);
-  app.get("/", function (req, res) {
-    const posts = posts.getPostsBySubscriptions(req.currentUser.subscriptions);
-    res.render("home", {
-      user: req.currentUser,
-      posts: posts
-    });
-  });
-
-
   app.use("/messages/:username", requireLoginMiddleware);
   app.get("/messages/:username", async (req, res) => {
     const messages = messages.getMessagesConcerningUsers(req.currentUser, req.params.username);
