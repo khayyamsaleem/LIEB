@@ -100,8 +100,8 @@ module.exports = app => {
     const messages = messages.getMessagesConcerningUsers(req.currentUser, req.params.username);
     const otherUser = users.getUser(req.params.username);
     res.render("messages", {
-      user: req.params.currentUser,
-      other_user: req.params.otherUser,
+      user: currentUser,
+      other_user: otherUser,
       messages: messages
     });
   });
