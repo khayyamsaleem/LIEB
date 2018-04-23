@@ -1,11 +1,23 @@
 const mongo = require('./mongo');
 
 async function createPost (post) {
+    // Basic validation
+    if (post === undefined)
+        return false;
+    else if (post.content === undefined || typeof post.content != "string")
+        return false;
+    else if (post.poster === undefined)
+        return false;
+
     // Get the user collection
     const posts = await mongo("database", "posts");
-    
+
     // Set the post time
     post.post_time = post.update_time = Date.now();
+    
+    // Add "missing" items
+    if (post.attachments === undefined) post.attachments = {};
+    if (post.reactions === undefined) post.reactions = {};
 
     // Set initial reactions
     post.reactions = []
