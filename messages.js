@@ -12,8 +12,12 @@ async function createMessage (message, from_id, to_id) {
 async function getMessagesConcerningUsers (userOne, userTwo) {
     const messages = mongo("database", "messages");
     
-    a2b = await messages.find({"from" : userOne, "to" : userTwo});
-    b2a = await messages.find({"to" : userOne, "from" : userTwo});
+    try {
+        a2b = await messages.find({"from" : userOne, "to" : userTwo});
+        b2a = await messages.find({"to" : userOne, "from" : userTwo});
+    } catch (ex) {
+        return [];
+    }
 
     res = Array.concat(a2b, b2a);
     res.sort((a,b) => b.time - a.time);

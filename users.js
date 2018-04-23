@@ -27,14 +27,24 @@ async function createUser (user) {
     user.sessions = []
 
     // Add the user
-    users.insert(user);
+    try {
+        let res = await users.insert(user);
+        return res.nInserted > 0;
+    } catch (ex) {
+        return false;
+    }
 }
 
 async function updateProfile (user, profileChanges) {
     // Get the user collection
     const users = await mongo("database", "users");
     
-    users.updateOne(user, profileChanges);
+    try {
+        let res = await users.updateOne(user, profileChanges);
+        return res.modifiedCount > 0;
+    } catch (ex) {
+        return false;
+    }
 }
 
 async function loginUser (username, password) {
@@ -72,10 +82,18 @@ async function logoutUser (username, sessionId) {
     try {
         // Remove the session 
         const sessions = await mongo("database", "sessions");
-        users.update({"username" : username}, {"$pull" : { "sessions" : sessionId }});
-        sessions.remove({"_id" : sess_id});
 
-    } catch (ex) {}
+        let res = await users.update({"username" : username}, {"$pull" : { "sessions" : sessionId }});
+
+        // If there were no users, we did not logout.
+        if (res.nModified == 0)
+            return false;
+
+        res = await sessions.remove({"_id" : sess_id});
+        return res.nRemoved > 0;
+    } catch (ex) {
+        return false;
+    }
 }
 
 async function addSubscription (username, userToSub) {
@@ -85,8 +103,11 @@ async function addSubscription (username, userToSub) {
         return;
     
     try {
-        users.update({"username" : username}, {"$push" : {"subscription_list" : userToSub["_id"]}});
-    } catch (ex) {}
+        let res = await users.update({"username" : username}, {"$push" : {"subscription_list" : userToSub["_id"]}});
+        return res.nModified > 0;
+    } catch (ex) {
+        return false;
+    }
 }
 
 async function removeSubscription (username, userToUnsub) {
@@ -95,8 +116,11 @@ async function removeSubscription (username, userToUnsub) {
 
     // Remove the item
     try {
-        users.update({"username" : username}, {"$pull" : {"subscription_list" : userToUnsub["_id"]}});
-    } catch (ex) {}
+        let res = await users.update({"username" : username}, {"$pull" : {"subscription_list" : userToUnsub["_id"]}});
+        return res.nModified > 0;
+    } catch (ex) {
+        return false;
+    }
 }
 
 module.exports = {
