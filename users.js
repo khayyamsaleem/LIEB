@@ -48,6 +48,9 @@ async function updateProfile (user, profileChanges) {
 }
 
 async function loginUser (username, password) {
+    if (typeof username != "string")
+        return false;
+
     // Get the user collection
     const users = await mongo("database", "users");
     
@@ -97,6 +100,11 @@ async function logoutUser (username, sessionId) {
 }
 
 async function addSubscription (username, userToSub) {
+    if (typeof username != "string")
+        return false;
+    else if (typeof userToSub != "string")
+        return false;
+
     // Get the user collection
     const users = await mongo("database", "users");
     if (users === undefined)
@@ -111,6 +119,11 @@ async function addSubscription (username, userToSub) {
 }
 
 async function removeSubscription (username, userToUnsub) {
+    if (typeof username != "string")
+        return false;
+    else if (typeof userToUnsub != "string")
+        return false;
+
     // Get the user collection
     const users = await mongo("database", "users");
 

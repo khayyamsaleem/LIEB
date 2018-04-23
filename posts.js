@@ -56,9 +56,13 @@ async function deletePost (postId) {
 }
 
 async function updatePost (postId, newContent) {
+    // Minimum validation
+    if (typeof newContent != "string")
+        return false;
+
     // Get the user collection
     const posts = await mongo("database", "posts");
-    
+
     // The update consists of new content and an updated timestamp
     update = {"content" : newContent, "update_time" : Date.now()};
 
@@ -74,6 +78,8 @@ async function updatePost (postId, newContent) {
 }
 
 async function addReactionToPost (postId, username, reactionType) {
+    if (typeof username != "string") return false;
+
     const posts = await mongo("database", "posts");
     
     // Add a new reaction to the list of reactions
@@ -84,12 +90,16 @@ async function addReactionToPost (postId, username, reactionType) {
         post.reactions.push({"reactionType" : reactionType, "username" : username});
         
         // Update the reactions
-        return await updatePost(postId, post);
+        let res = await updatePost(postId, post);
+
+        return res.nModified > 0;
     } else
         return false;
 }
 
 async function removeReactionFromPost (postId, username, reactionType) {
+    if (typeof username != "string") return false;
+
     const posts = await mongo("database", "posts");
     
     // Add a new reaction to the list of reactions
@@ -100,7 +110,9 @@ async function removeReactionFromPost (postId, username, reactionType) {
         post.reactions.splice(idx, 1);
 
         // Update the reactions
-        return await updatePost(postId, post);
+        let res = await updatePost(postId, post);
+
+        return res.nModified > 0;
     } else
         return false;
 }
