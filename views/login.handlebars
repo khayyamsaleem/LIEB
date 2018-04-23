@@ -1,0 +1,15 @@
+<header class="login_header">
+  <h1>Login</h1>
+</header>
+<main class="login_content">
+  <form id="login-form" method="post" action="/login">
+    <label for="usernameInput">Username:</label>
+    <input id="usernameInput" type="text" name="username" />
+    <label for="passwordInput">Password:</label>
+    <input id="passwordInput" type="password" name="password" />
+    <input type="submit" value="Login" />
+  </form>
+  {{#if error }}
+    <p>Error: {{error}}</p>
+  {{/if}}
+</main>

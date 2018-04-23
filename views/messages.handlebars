@@ -1,0 +1,22 @@
+<header class="messages_header">
+  <h1>Messages between {{ user }} and {{ other_user }}</h1>
+</header>
+<main class="messages_content">
+  <ol id="message_list">
+    {{#each messages}}
+        <li>
+          <div
+            {{#if this.sentByCurrent}}
+              class="message_current"
+            {{else}}
+              class="message_other"
+            {{/if}}
+          >
+            <h2 class="message_title">{{ this.title }}</h2>
+            <p class="message_metadata">sent at {{ this.send_time }}</p>
+            <p class="message_content">{{ this.content }}</p>
+          </div>
+        </li>
+    {{/each}}
+  </ol>
+</main>

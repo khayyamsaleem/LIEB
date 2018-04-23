@@ -1,0 +1,23 @@
+<header class="signup_header">
+  <h1>Signup</h1>
+</header>
+<main class="signup_content">
+  <form id="signup-form" method="post" action="/signup">
+    <label for="usernameInput">Username:</label>
+    <input id="usernameInput" type="text" name="username" />
+    <label for="passwordInput">Password:</label>
+    <input id="passwordInput" type="password" name="password" />
+    <label for="passwordConfirmInput">Confirm Password:</label>
+    <input id="passwordConfirmInput" type="password" name="passwordConfirm" />
+    <input type="submit" value="Sign up" />
+  </form>
+  <div class="signup_errors">
+    {{#if errors}}
+      {{#each errors}}
+      <ul id="signup_error_list">
+        <li id="signup_error"><p>{{ this }}</p></li>
+      </ul>
+      {{/each}}
+    {{/if}}
+  </div>
+</main>
