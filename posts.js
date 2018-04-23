@@ -10,8 +10,14 @@ async function createPost (post) {
     // Set initial reactions
     post.reactions = []
 
-    // Add the user
-    posts.insert(post);
+    try {
+        // Add the user
+        let res = await posts.insert(post);
+        
+        return res.nInserted > 0;
+    } catch (ex) {
+        return false;
+    }
 }
 
 async function getPostsBySubscriptions (subscriptions) {
@@ -19,15 +25,22 @@ async function getPostsBySubscriptions (subscriptions) {
     const posts = await mongo("database", "posts");
     
     // Gather all posts
-    return await await posts.find({"poster" : {"$in" : subscriptions}}).sort({"post_time" : 1});
+    return await posts.find({"poster" : {"$in" : subscriptions}}).sort({"post_time" : 1});
 }
 
 async function deletePost (postId) {
     // Get the user collection
     const posts = await mongo("database", "posts");
     
-    // Perform the removal
-    posts.remove({"_id": postId});
+    try {
+        // Perform the removal
+        let res = await posts.remove({"_id": postId});
+
+        // Check whether or not something was removed
+        return res.nRemoved > 0;
+    } catch (ex) {
+        return false;
+    }
 }
 
 async function updatePost (postId, newContent) {
@@ -37,8 +50,15 @@ async function updatePost (postId, newContent) {
     // The update consists of new content and an updated timestamp
     update = {"content" : newContent, "update_time" : Date.now()};
 
-    // Apply the update
-    posts.updateOne({"_id" : postId}, update);
+    try {
+        // Apply the update
+        let res = await posts.updateOne({"_id" : postId}, update);
+        
+        // Return whether or not something was modified
+        return res.modifiedCount > 0;
+    } catch (ex) {
+        return false;
+    }
 }
 
 async function addReactionToPost (postId, username, reactionType) {
@@ -52,8 +72,9 @@ async function addReactionToPost (postId, username, reactionType) {
         post.reactions.push({"reactionType" : reactionType, "username" : username});
         
         // Update the reactions
-        updatePost(postId, post);
-    }
+        return await updatePost(postId, post);
+    } else
+        return false;
 }
 
 async function removeReactionFromPost (postId, username, reactionType) {
@@ -67,6 +88,7 @@ async function removeReactionFromPost (postId, username, reactionType) {
         post.reactions.splice(idx, 1);
 
         // Update the reactions
-        updatePost(postId, post);
-    }
+        return await updatePost(postId, post);
+    } else
+        return false;
 }

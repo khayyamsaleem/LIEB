@@ -15,7 +15,7 @@ async function getMessagesConcerningUsers (userOne, userTwo) {
     a2b = await messages.find({"from" : userOne, "to" : userTwo});
     b2a = await messages.find({"to" : userOne, "from" : userTwo});
 
-    res = a2b + b2a;
+    res = Array.concat(a2b, b2a);
     res.sort((a,b) => b.time - a.time);
     
     return res;
