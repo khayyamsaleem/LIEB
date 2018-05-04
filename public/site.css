@@ -1,1 +1,24 @@
-/* TODO: Implement stylesheet */
+main {
+    background: white;
+    font-family: Georgia, Cambria, "Times New Roman", Times, serif;
+    font-size: 16pt;
+    margin: auto;
+}
+
+header {
+    font-size: 14pt;
+}
+
+h1 {
+    font-size: 12pt
+
+}
+
+h2, h3, h4, h5, h6 {
+    font-size: 10pt
+
+}
+
+p {
+    font-size: 10pt
+}
