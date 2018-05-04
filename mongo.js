@@ -1,7 +1,5 @@
 const client = require('mongodb').MongoClient;
 
-const settings = require("./settings");
-
 // The connection info
 let _connection = undefined;
 let _db = undefined;

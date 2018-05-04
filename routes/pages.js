@@ -12,7 +12,7 @@ const requireLoginMiddleware = (req, res, next) => {
 
 const requireNoLoginMiddleware = (req, res, next) => {
   if (req.currentUser) {
-    res.redirect("/home");
+    res.redirect("/");
   } else {
     next();
   }
@@ -32,7 +32,7 @@ module.exports = app => {
         .cookie("AuthCookie", sessionId)
         .redirect("/");
     } else {
-      res.render("login", { error: "Invalud username/password provided" });
+      res.render("login", { error: "Invalid username/password provided" });
     }
   });
 
@@ -77,7 +77,13 @@ module.exports = app => {
         };
 
         const createdUser = await users.createUser(userToCreate);
-        res.redirect("/");
+        if (createdUser) {
+          res.redirect("/");
+        } else {
+          res.render("signup", {
+            errors: ['Failed to create user.']
+          });
+        }
       } catch (e) {
         res.render("signup", {
           errors: [`Failed to create user, error: ${e}`]
@@ -88,10 +94,10 @@ module.exports = app => {
 
   app.use("/", requireLoginMiddleware);
   app.get("/", function (req, res) {
-    const posts = posts.getPostsBySubscriptions(req.currentUser.subscriptions);
+    const postsBySubscription = posts.getPostsBySubscriptions(req.currentUser.subscriptions);
     res.render("home", {
       user: req.currentUser,
-      posts: posts
+      posts: postsBySubscription
     });
   });
 
