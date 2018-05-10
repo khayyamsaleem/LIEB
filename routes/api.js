@@ -1,26 +1,19 @@
+const posts = require('../posts');
 module.exports = app => {
-
-  // Auth
-  app.post("/login", (req, res) => {
-    // TODO: login the user
-  });
-
-  app.get("/logout", (req, res) => {
-    // TODO: logout the user
-  });
-
-  // Users
-  app.post("/users/:username", (req, res) => {
-    // TODO: create a new user
-  });
-
-  app.delete("/users/:username", (req, res) => {
-    // TODO: delete a user
-  });
 
   // Posts
   app.post("/posts", (req, res) => {
     // TODO: create a new post
+    const p = {
+        title: req.body.title,
+        poster: req.body.poster,
+        content: req.body.content,
+        post.attachments: req.body.attachments,
+        post.reactions = req.body.reactions
+    }
+    const chk = posts.createPost(p)
+    if (chk) res.status(200).end()
+    else res.status(500).json({err: "unable to add post to database"});
   });
 
   app.put("/posts/:postId", (req, res) => {
