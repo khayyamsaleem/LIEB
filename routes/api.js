@@ -8,8 +8,7 @@ module.exports = app => {
         title: req.body.title,
         poster: req.body.poster,
         content: req.body.content,
-        post.attachments: req.body.attachments,
-        post.reactions = req.body.reactions
+        attachments: req.body.attachments,
     }
     const chk = posts.createPost(p)
     if (chk) res.status(200).end()
