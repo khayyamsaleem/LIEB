@@ -10,7 +10,7 @@ module.exports = app => {
         content: req.body.content,
         attachments: req.body.attachments,
     }
-    const chk = posts.createPost(p)
+    const chk = await posts.createPost(p)
     if (chk) res.status(200).end()
     else res.status(500).json({err: "unable to add post to database"});
   });
