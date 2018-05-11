@@ -58,7 +58,7 @@ input {
     text-align: center !important;
 }
 
-.form-button {
+.form-button{
     margin: 20px;
 }
 
@@ -66,7 +66,21 @@ input {
     margin: 0px;
 }
 
-input [type=button], input[type=submit]{
+input [type=button], input[type=submit], button [type=navigate]{
+    background-color: white;
+    color: 	#0072ed;
+    padding: 5px;
+    font-size: 25px;
+    font-weight: 550;
+}
+
+.poster-bucket{
+    align-items: center;
+    text-align: center !important;
+    margin: 20px;
+}
+
+.new-poster{
     background-color: white;
     color: 	#0072ed;
     padding: 5px;

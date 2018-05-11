@@ -25,7 +25,9 @@
       </div>
     </div>
   </nav>
-  <a href="/posts_form">Create New Post!</a> 
+  <div class="poster-bucket">
+    <a href="/posts_form"><button class="new-poster">Create New Post!</button></a> 
+  </div>
   <ol id="post_list">
     {{#each posts}}
         <li>
@@ -48,5 +50,4 @@
         </li>
     {{/each}}
   </ol>
-  <a href="/logout">LOG OUT</a>
 </main>
