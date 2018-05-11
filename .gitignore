@@ -1,3 +1,5 @@
 node_modules
-public/profile_pic
-public/post_attachment
+public/profile_pic/*
+!public/profile_pic/.gitkeep
+public/post_attachment/*
+!public/post_attachment/.gitkeep
