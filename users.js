@@ -1,11 +1,11 @@
-const mongo = require('./mongo');
+const mongo = require('./mongo').collection;
 const bcrypt = require('bcrypt');
 const uuid = require('uuid');
 const saltRounds = 4;
 
 async function getUser (username) {
     // Get the user collection
-    const users = await mongo("database", "users");
+    const users = await mongo("users");
 
     // Get the user
     try {
@@ -22,7 +22,7 @@ async function getUser (username) {
 
 async function getUserBySessionId (sessionId) {
     // Get the sessions collection
-    const sessions = await mongo("database", "sessions");
+    const sessions = await mongo("sessions");
 
     // Get the session
     try {
@@ -35,10 +35,11 @@ async function getUserBySessionId (sessionId) {
 
 async function createUser (user) {
     // Get the user collection
-    const users = await mongo("database", "users");
+    const users = await mongo("users");
 
     // No sessions by default
-    user.sessions = []
+    user.sessions = [];
+    user.subscriptions = [];
     user.password = await bcrypt.hash(user.password, saltRounds);
 
     // Add the user
@@ -55,13 +56,44 @@ async function createUser (user) {
     }
 }
 
-async function updateProfile (user, profileChanges) {
+async function updatePassword (user, newPassword) {
     // Get the user collection
-    const users = await mongo("database", "users");
+    const users = await mongo("users");
+    const hash = await bcrypt.hash(newPassword, saltRounds);
 
     try {
-        let res = await users.updateOne(user, profileChanges);
+        let res = await users.updateOne({ username: user}, { $set: { password: hash }});
         return res.modifiedCount > 0;
+    } catch (ex) {
+        console.log(ex);
+        return false;
+    }
+}
+
+async function updatePicture (user, newPicturePath) {
+    // Get the user collection
+    const users = await mongo("users");
+
+    try {
+        let res = await users.updateOne({ username: user }, { $set: { picture: newPicturePath }});
+        return res.modifiedCount > 0;
+    } catch (ex) {
+        return false;
+    }
+}
+
+async function checkPassword(username, password) {
+    if (typeof username != "string")
+        return false;
+
+    // Get the user collection
+    const users = await mongo("users");
+
+    // Get the user
+    try {
+        let user = await users.findOne({"username" : username});
+
+        return bcrypt.compare(password, user.password);
     } catch (ex) {
         return false;
     }
@@ -72,7 +104,7 @@ async function loginUser (username, password) {
         return false;
 
     // Get the user collection
-    const users = await mongo("database", "users");
+    const users = await mongo("users");
 
     // Get the user
     try {
@@ -85,7 +117,7 @@ async function loginUser (username, password) {
             let sess_id = uuid();
 
             // Add to the session list
-            const sessions = await mongo("database", "sessions");
+            const sessions = await mongo("sessions");
             users.update({"username" : username}, {"$push" : { "sessions" : sess_id }});
             sessions.insert({"_id" : sess_id, "username" : username});
 
@@ -100,20 +132,20 @@ async function loginUser (username, password) {
 
 async function logoutUser (username, sessionId) {
     // Get the user collection
-    const users = await mongo("database", "users");
+    const users = await mongo("users");
 
     try {
         // Remove the session
-        const sessions = await mongo("database", "sessions");
+        const sessions = await mongo("sessions");
 
         let res = await users.update({"username" : username}, {"$pull" : { "sessions" : sessionId }});
 
         // If there were no users, we did not logout.
-        if (res.nModified == 0)
+        if (res.modifiedCount == 0)
             return false;
 
         res = await sessions.remove({"_id" : sess_id});
-        return res.nRemoved > 0;
+        return res.removedCount > 0;
     } catch (ex) {
         return false;
     }
@@ -126,13 +158,11 @@ async function addSubscription (username, userToSub) {
         return false;
 
     // Get the user collection
-    const users = await mongo("database", "users");
-    if (users === undefined)
-        return;
+    const users = await mongo("users");
 
     try {
-        let res = await users.update({"username" : username}, {"$push" : {"subscription_list" : userToSub["_id"]}});
-        return res.nModified > 0;
+        let res = await users.update({"username" : username}, {"$push" : {"subscriptions" : userToSub}});
+        return res.modifiedCount > 0;
     } catch (ex) {
         return false;
     }
@@ -145,12 +175,12 @@ async function removeSubscription (username, userToUnsub) {
         return false;
 
     // Get the user collection
-    const users = await mongo("database", "users");
+    const users = await mongo("users");
 
     // Remove the item
     try {
-        let res = await users.update({"username" : username}, {"$pull" : {"subscription_list" : userToUnsub["_id"]}});
-        return res.nModified > 0;
+        let res = await users.update({"username" : username}, {"$pull" : {"subscriptions" : userToUnsub}});
+        return res.modifiedCount > 0;
     } catch (ex) {
         return false;
     }
@@ -160,7 +190,9 @@ module.exports = {
     getUser,
     getUserBySessionId,
     createUser,
-    updateProfile,
+    updatePassword,
+    updatePicture,
+    checkPassword,
     loginUser,
     logoutUser,
     addSubscription,

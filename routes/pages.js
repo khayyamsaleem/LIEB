@@ -1,26 +1,11 @@
 const users = require("../users");
 const posts = require("../posts");
 const messages = require("../messages");
-
-const requireLoginMiddleware = (req, res, next) => {
-  if (req.currentUser) {
-    next();
-  } else {
-    res.redirect("/login");
-  }
-};
-
-const requireNoLoginMiddleware = (req, res, next) => {
-  if (req.currentUser) {
-    res.redirect("/");
-  } else {
-    next();
-  }
-};
+const middleware = require("../middleware");
 
 module.exports = app => {
 
-  app.use("/login", requireNoLoginMiddleware);
+  app.use("/login", middleware.requireNoLoginMiddleware);
   app.get("/login", (req, res) => {
     res.render("login");
   });
@@ -36,7 +21,7 @@ module.exports = app => {
     }
   });
 
-  app.use("/signup", requireNoLoginMiddleware);
+  app.use("/signup", middleware.requireNoLoginMiddleware);
   app.get("/signup", (req, res) => {
     res.render("signup")
   });
@@ -71,9 +56,17 @@ module.exports = app => {
       })
     } else {
       try {
+        let pathToProfilePic = undefined;
+        if (req.files && req.files.profilePicture) {
+          const profilePicture = req.files.profilePicture;
+          const path = "public/profile_pic/" + username + '.' + req.files.profilePicture.name.split('.').pop();
+          await profilePicture.mv(path);
+          pathToProfilePic = path;
+        }
         const userToCreate = {
           username: username,
-          password: password
+          password: password,
+          picture: pathToProfilePic
         };
 
         const createdUser = await users.createUser(userToCreate);
@@ -92,19 +85,22 @@ module.exports = app => {
     }
   });
 
-  app.use("/", requireLoginMiddleware);
-  app.get("/", function (req, res) {
-    const postsBySubscription = posts.getPostsBySubscriptions(req.currentUser.subscriptions);
+  app.use("/", middleware.requireLoginMiddleware);
+  app.get("/", async function (req, res) {
+    const postsBySubscription = await posts.getPostsBySubscriptions(req.currentUser.subscriptions);
+    if (!req.currentUser.picture) {
+      req.currentUser.picture = "public/default_profile_pic.png";
+    }
     res.render("home", {
       user: req.currentUser,
       posts: postsBySubscription
     });
   });
 
-  app.use("/messages/:username", requireLoginMiddleware);
+  app.use("/messages/:username", middleware.requireLoginMiddleware);
   app.get("/messages/:username", async (req, res) => {
-    const messages = messages.getMessagesConcerningUsers(req.currentUser, req.params.username);
-    const otherUser = users.getUser(req.params.username);
+    const messages = await messages.getMessagesConcerningUsers(req.currentUser, req.params.username);
+    const otherUser = await users.getUser(req.params.username);
     res.render("messages", {
       user: currentUser,
       other_user: otherUser,
@@ -112,15 +108,21 @@ module.exports = app => {
     });
   });
 
-  app.use("/users/:username", requireLoginMiddleware);
+  app.use("/users/:username", middleware.requireLoginMiddleware);
   app.get("/users/:username", async (req, res) => {
     try {
-      const user = users.getUser(req.params.username);
-      const isCurrentUser = user.username === req.params.currentUser.username;
-      res.render("profile", {
-        user: user,
-        isCurrentUser: isCurrentUser,
-      });
+      const user = await users.getUser(req.params.username);
+      if (user) {
+        const isCurrentUser = user.username === req.currentUser.username;
+        res.render("profile", {
+          user: user,
+          isCurrentUser: isCurrentUser,
+        });
+      } else {
+        res.render("profile", {
+          missingUser: req.params.username
+        });
+      }
     } catch (e) {
       res.render("profile", {
         missingUser: req.params.username

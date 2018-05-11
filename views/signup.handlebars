@@ -2,15 +2,22 @@
   <h1>Signup</h1>
 </header>
 <main class="signup_content">
-  <form id="signup-form" method="post" action="/signup">
+  <form
+    id="signup-form"
+    method="post"
+    action="/signup"
+    encType="multipart/form-data">
     <label for="usernameInput">Username:</label>
     <input id="usernameInput" type="text" name="username" />
     <label for="passwordInput">Password:</label>
     <input id="passwordInput" type="password" name="password" />
     <label for="passwordConfirmInput">Confirm Password:</label>
     <input id="passwordConfirmInput" type="password" name="passwordConfirm" />
+    <label for="profilePictureInput">Profile Picture:</label>
+    <input id="profilePictureInput" accept="image/*" type="file" name="profilePicture" />
     <input type="submit" value="Sign up" />
   </form>
+  <a href="/login">Go back to login</a>
   <div class="signup_errors">
     {{#if errors}}
       {{#each errors}}

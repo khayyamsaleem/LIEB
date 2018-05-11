@@ -1,4 +1,4 @@
-const mongo = require('./mongo');
+const mongo = require('./mongo').collection;
 
 async function createPost (post) {
     // Basic validation
@@ -10,7 +10,7 @@ async function createPost (post) {
         return false;
 
     // Get the user collection
-    const posts = await mongo("database", "posts");
+    const posts = await mongo("posts");
 
     // Set the post time
     post.post_time = post.update_time = Date.now();
@@ -26,7 +26,7 @@ async function createPost (post) {
         // Add the user
         let res = await posts.insert(post);
 
-        return res.nInserted > 0;
+        return res.numInserted > 0;
     } catch (ex) {
         return false;
     }
@@ -34,15 +34,22 @@ async function createPost (post) {
 
 async function getPostsBySubscriptions (subscriptions) {
     // Get the user collection
-    const posts = await mongo("database", "posts");
+    const posts = await mongo("posts");
 
+    console.log(subscriptions);
     // Gather all posts
-    return await posts.find({"poster" : {"$in" : subscriptions}}).sort({"post_time" : 1});
+    let postsBySubscriptions = await posts.find({"poster" : {"$in" : subscriptions}}).sort({"post_time" : 1}).toArray();
+
+    return postsBySubscriptions.map((post) => {
+      post.post_time = new Date(post.post_time * 1000).toString();
+      post.update_time = new Date(post.update_time * 1000).toString();
+      return post;
+    });
 }
 
 async function deletePost (postId) {
     // Get the user collection
-    const posts = await mongo("database", "posts");
+    const posts = await mongo("posts");
 
     try {
         // Perform the removal
@@ -61,7 +68,7 @@ async function updatePost (postId, newContent) {
         return false;
 
     // Get the user collection
-    const posts = await mongo("database", "posts");
+    const posts = await mongo("posts");
 
     // The update consists of new content and an updated timestamp
     update = {"content" : newContent, "update_time" : Date.now()};
@@ -80,7 +87,7 @@ async function updatePost (postId, newContent) {
 async function addReactionToPost (postId, username, reactionType) {
     if (typeof username != "string") return false;
 
-    const posts = await mongo("database", "posts");
+    const posts = await mongo("posts");
 
     // Add a new reaction to the list of reactions
     let post = await posts.findOne({"_id" : postId});
@@ -92,7 +99,7 @@ async function addReactionToPost (postId, username, reactionType) {
         // Update the reactions
         let res = await updatePost(postId, post);
 
-        return res.nModified > 0;
+        return res.modifiedCount > 0;
     } else
         return false;
 }
@@ -100,7 +107,7 @@ async function addReactionToPost (postId, username, reactionType) {
 async function removeReactionFromPost (postId, username, reactionType) {
     if (typeof username != "string") return false;
 
-    const posts = await mongo("database", "posts");
+    const posts = await mongo("posts");
 
     // Add a new reaction to the list of reactions
     let post = await posts.findOne({"_id" : postId});
@@ -112,7 +119,7 @@ async function removeReactionFromPost (postId, username, reactionType) {
         // Update the reactions
         let res = await updatePost(postId, post);
 
-        return res.nModified > 0;
+        return res.modifiedCount > 0;
     } else
         return false;
 }

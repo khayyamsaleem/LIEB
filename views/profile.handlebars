@@ -2,10 +2,13 @@
   <header class="profile_header">
     <h1>Profile - {{user.username}}</h1>
   </header>
-  <main class="profile_content"
+  <main class="profile_content">
+    <p id="profile_message"></p>
     <section id="change-password-section">
       <h2>Change Password</h2>
-      <form id="change-password-form">
+      <form
+        id="change-password-form"
+        onsubmit="updateUserPassword(event)">
         <label for="currentPasswordInput">Current Password:</label>
         <input id="currentPasswordInput" type="password" name="currentPassword" />
         <label for="newPasswordInput">New Password:</label>
@@ -17,11 +20,17 @@
     </section>
     <section id="change-picture-section">
       <h2>Change Profile Picture</h2>
-      <form id="change-profile-picture">
+      <form
+        id="change-profile-picture"
+        onsubmit="updateUserPicture(event)">
         <label for="profilePictureInput">New Profile Picture:</label>
-        <input id="profilePictureInput" type="file" />
+        <input id="profilePictureInput" accept="image/*" type="file" />
         <input type="submit" value="Update" />
       </form>
+    </section>
+    <section class="profile_errors">
+      <ul id="profile_error_list">
+      </ul>
     </section>
   </main>
 {{else}}

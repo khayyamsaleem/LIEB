@@ -3,10 +3,11 @@ const app = express();
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const exphbs = require("express-handlebars");
+const fileUpload = require("express-fileupload");
 const static = express.static(__dirname + "/public");
 
 const configRoutes = require("./routes");
-const auth = require("./auth");
+const middleware = require("./middleware");
 
 const port = 3000;
 
@@ -21,7 +22,8 @@ app.use(bodyParser.urlencoded({
     extended: true
 }));
 
-app.use(auth);
+app.use(middleware.setUserMiddleware);
+app.use(fileUpload());
 
 configRoutes(app);
 
