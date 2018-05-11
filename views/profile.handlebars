@@ -1,8 +1,4 @@
-<html lang="en">
 {{#if user}}
-  <head>
-    <link href="/public/site.css" rel="stylesheet">
-  </head>
   <header class="profile_header">
     <h1>Profile - {{user.username}}</h1>
   </header>
@@ -29,9 +25,6 @@
     </section>
   </main>
 {{else}}
-  <head>
-    <link href="/public/site.css" rel="stylesheet">
-  </head>
   <header class="profile_header">
     <h1>Profile - {{missingUser}}</h1>
   </header>
@@ -39,4 +32,3 @@
     <p>No user {{ missingUser }}</p>
   </main>
 {{/if}}
-</html>

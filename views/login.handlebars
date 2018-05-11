@@ -1,7 +1,3 @@
-<html lang="en">
-<head>
-  <link href="/public/site.css" rel="stylesheet">
-</head>
 <header class="login_header">
   <h1>Login</h1>
 </header>
@@ -13,8 +9,8 @@
     <input id="passwordInput" type="password" name="password" />
     <input type="submit" value="Login" />
   </form>
+  <a href="/signup">Create a new account</a>
   {{#if error }}
     <p>Error: {{error}}</p>
   {{/if}}
 </main>
-</html>
