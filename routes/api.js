@@ -1,23 +1,48 @@
+const posts = require('../posts');
+
 const users = require('../users');
 const middleware = require('../middleware');
 
 module.exports = app => {
-
   // Posts
-  app.post("/posts", (req, res) => {
-    // TODO: create a new post
+  app.post("/posts", async (req, res) => {
+    const p = {
+        title: req.body.title,
+        poster: req.body.poster,
+        content: req.body.content,
+        attachments: []
+    }
+    if (req.files)
+      p.attachments.push(req.files.att);
+    const chk = await posts.createPost(p)
+    if (chk) res.status(200).end()
+    else res.status(500).json({err: "unable to add post to database"});
   });
 
-  app.put("/posts/:postId", (req, res) => {
-    // TODO: update a post's content
+  app.put("/posts/:postId", async (req, res) => {
+    const p_id = req.params.postId;
+    const new_content = req.body.content;
+    const updated = await posts.updatePost(p_id, new_content);
+    if (updated) res.status(200).end()
+    else res.status(500).json({err: "unable to update post"})
   });
 
-  app.post("/posts/:postId/react", (req, res) => {
-    // TODO: react to a post
+  app.post("/posts/:postId/react", async (req, res) => {
+    const p_id = req.params.postId;
+    const r = req.body.reaction;
+    const u = req.params.currentUser.username;
+    const chk = await posts.addReactionToPost(p_id, u, r);
+    if (chk) res.status(200).end();
+    else res.status(500).json({err: "unable to add reaction to post"});
   });
 
-  app.delete("/posts/:postId/react", (req, res) => {
-    // TODO: remove reaction to a post
+  app.delete("/posts/:postId/react", async (req, res) => {
+    const p_id = req.params.postId;
+    const r = req.body.reaction;
+    const u = req.params.currentUser.username;
+    const chk = await posts.removeReactionFromPost(p_id, u, r);
+    if (chk) res.status(200).end()
+    else res.status(500).json({err: "unable to remove reaction from post"});
   });
 
   app.delete("/posts/:postId", (req, res) => {
