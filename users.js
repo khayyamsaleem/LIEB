@@ -75,7 +75,7 @@ async function updatePicture (user, newPicturePath) {
     const users = await mongo("users");
 
     try {
-        let res = await users.updateOne(user, { picture: newPicturePath });
+        let res = await users.updateOne({ username: user }, { $set: { picture: newPicturePath }});
         return res.modifiedCount > 0;
     } catch (ex) {
         return false;

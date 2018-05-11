@@ -22,11 +22,9 @@
       <h2>Change Profile Picture</h2>
       <form
         id="change-profile-picture"
-        method="post"
-        action="/updatePicture"
-        encType="multipart/form-data">
+        onsubmit="updateUserPicture(event)">
         <label for="profilePictureInput">New Profile Picture:</label>
-        <input id="profilePictureInput" type="file" />
+        <input id="profilePictureInput" accept="image/*" type="file" />
         <input type="submit" value="Update" />
       </form>
     </section>

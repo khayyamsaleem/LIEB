@@ -93,18 +93,19 @@ module.exports = app => {
     }
 
     if (errors.length > 0) {
-      res.render("profile", {
+      res.status(500).json({
         errors: errors
       })
     } else {
       try {
+        let path = undefined;
         if (req.files && req.files.profilePicture) {
           const profilePicture = req.files.profilePicture;
-          const path = "public/profile_pic/" + username;
+          path = "public/profile_pic/" + req.currentUser.username + '.' + req.files.profilePicture.name.split('.').pop();
           await profilePicture.mv(path);
         }
 
-        const updateSuccess = await users.updatePicture(req.currentUser.username, pathToProfilePic);
+        const updateSuccess = await users.updatePicture(req.currentUser.username, path);
         if (updateSuccess) {
           res.status(200).json({
             message: "Profile picture updated."

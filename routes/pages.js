@@ -59,7 +59,7 @@ module.exports = app => {
         let pathToProfilePic = undefined;
         if (req.files && req.files.profilePicture) {
           const profilePicture = req.files.profilePicture;
-          const path = "public/profile_pic/" + username;
+          const path = "public/profile_pic/" + username + '.' + req.files.profilePicture.name.split('.').pop();
           await profilePicture.mv(path);
           pathToProfilePic = path;
         }
