@@ -109,12 +109,12 @@ module.exports = app => {
 
   app.use("/messages/:username", middleware.requireLoginMiddleware);
   app.get("/messages/:username", async (req, res) => {
-    const messages = await messages.getMessagesConcerningUsers(req.currentUser, req.params.username);
     const otherUser = await users.getUser(req.params.username);
+    const message = await messages.getMessagesConcerningUsers(req.currentUser._id, otherUser._id);
     res.render("messages", {
-      user: currentUser,
-      other_user: otherUser,
-      messages: messages
+      user: req.currentUser.username,
+      other_user: otherUser.username,
+      messages: message
     });
   });
 
