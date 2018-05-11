@@ -26,5 +26,5 @@ app.use(auth);
 configRoutes(app);
 
 app.listen(port, () => {
-    console.log(`Lieb is running on port ${port}!`);
+    console.log(`Lieb is running at http://localhost:${port} !`);
 });

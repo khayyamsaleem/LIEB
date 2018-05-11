@@ -16,11 +16,11 @@ async function createPost (post) {
     post.post_time = post.update_time = Date.now();
 
     // Add "missing" items
-    if (post.attachments === undefined) post.attachments = {};
-    if (post.reactions === undefined) post.reactions = {};
+    if (post.attachments === undefined) post.attachments = [];
+    if (post.reactions === undefined) post.reactions = [];
 
     // Set initial reactions
-    post.reactions = []
+    post.reactions = [];
 
     try {
         // Add the user
