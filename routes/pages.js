@@ -21,6 +21,11 @@ module.exports = app => {
     }
   });
 
+  app.get("/logout", async (req, res) => {
+    await users.logoutUser(req.cookies.AuthCookie);
+    res.redirect('/login');
+  })
+
   app.use("/signup", middleware.requireNoLoginMiddleware);
   app.get("/signup", (req, res) => {
     res.render("signup")

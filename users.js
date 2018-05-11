@@ -118,7 +118,6 @@ async function loginUser (username, password) {
 
             // Add to the session list
             const sessions = await mongo("sessions");
-            users.update({"username" : username}, {"$push" : { "sessions" : sess_id }});
             sessions.insert({"_id" : sess_id, "username" : username});
 
             return sess_id;
@@ -130,7 +129,7 @@ async function loginUser (username, password) {
     }
 }
 
-async function logoutUser (username, sessionId) {
+async function logoutUser (sessionId) {
     // Get the user collection
     const users = await mongo("users");
 
@@ -138,14 +137,7 @@ async function logoutUser (username, sessionId) {
         // Remove the session
         const sessions = await mongo("sessions");
 
-        let res = await users.update({"username" : username}, {"$pull" : { "sessions" : sessionId }});
-
-        // If there were no users, we did not logout.
-        if (res.modifiedCount == 0)
-            return false;
-
-        res = await sessions.remove({"_id" : sess_id});
-        return res.removedCount > 0;
+        return await sessions.deleteOne({"_id" : sessionId});
     } catch (ex) {
         return false;
     }
