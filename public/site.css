@@ -1,4 +1,5 @@
 @import url(https://fonts.googleapis.com/css?family=Asap);
+/*Font courtesy of Google Web Fonts*/
 
 html * {
     font-family: 'Asap', sans-serif;
@@ -6,13 +7,10 @@ html * {
 }
 
 html { 
-    /* The image used */
     background-image: url(https://i.imgur.com/xwYdZVw.gif);
-
-    /* Full height */
+    /*Original image located here: https://media2.giphy.com/media/xTiTnxpQ3ghPiB2Hp6/giphy.gif*/
+    /*Source: Matthew Butler on GIPHY*/
     height: 100%; 
-
-    /* Center and scale the image nicely */
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
@@ -24,7 +22,6 @@ body {
     margin: auto;
     background-color:#0072ed;
     width: 75%;
-    background-op
 }
 
 header {
@@ -37,33 +34,53 @@ header {
 h1 {
     font-size: 25pt;
     background-color:#0072ed;
+}
 
+a:hover{
+    color:#061288;
 }
 
 form{
     text-align: center;
     align-items: center;
+    margin: 10px;
 }
 
 input {
     width: 95%;
-    margin: 5px;
     color: black;
+    font-size: 16pt;
+}
+
+.form-group {
+    margin: 5px;
+    align-items: center;
+    text-align: center !important;
+}
+
+.form-button {
+    margin: 20px;
+}
+
+.form-link {
+    margin: 0px;
 }
 
 input [type=button], input[type=submit]{
     background-color: white;
     color: 	#0072ed;
     padding: 5px;
-    margin: 15px;
     font-size: 25px;
-    font-weight: 700;
+    font-weight: 550;
 }
 
 ol {
     font-size: 12pt;
     background-color:#0072ed;
+}
 
+ul {
+    list-style-type: none;
 }
 
 h2, h3, h4, h5, h6 {
@@ -72,5 +89,45 @@ h2, h3, h4, h5, h6 {
 }
 
 p {
+    font-size: 10pt;
+    margin: 10px 0px 10px 0px;
+}
+
+.post {
+    background-color: #222222;
+    color: #605B5D;
+    padding: 10px;
+}
+
+.post_list {
+    background-color: #080808;
+    color: white;
+}
+
+.post_title {
+    background-color: #080808;
+    color: white;
+    width: 100%;
+    font-size: 16pt;
+}
+
+.post_metadata {
+    color: #605B5D;
+    font-size: 10pt;
+}
+
+.post_updated {
+    color: #605B5D;
+    font-size: 10pt;
+}
+
+.post_content {
+    color: white;
+    width: 100%;
+    font-size: 12pt;
+}
+
+.reactions {
+    color: white;
     font-size: 10pt;
 }
