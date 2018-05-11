@@ -56,13 +56,44 @@ async function createUser (user) {
     }
 }
 
-async function updateProfile (user, profileChanges) {
+async function updatePassword (user, newPassword) {
+    // Get the user collection
+    const users = await mongo("users");
+    const hash = await bcrypt.hash(newPassword, saltRounds);
+
+    try {
+        let res = await users.updateOne({ username: user}, { $set: { password: hash }});
+        return res.modifiedCount > 0;
+    } catch (ex) {
+        console.log(ex);
+        return false;
+    }
+}
+
+async function updatePicture (user, newPicturePath) {
     // Get the user collection
     const users = await mongo("users");
 
     try {
-        let res = await users.updateOne(user, profileChanges);
+        let res = await users.updateOne(user, { picture: newPicturePath });
         return res.modifiedCount > 0;
+    } catch (ex) {
+        return false;
+    }
+}
+
+async function checkPassword(username, password) {
+    if (typeof username != "string")
+        return false;
+
+    // Get the user collection
+    const users = await mongo("users");
+
+    // Get the user
+    try {
+        let user = await users.findOne({"username" : username});
+
+        return bcrypt.compare(password, user.password);
     } catch (ex) {
         return false;
     }
@@ -159,7 +190,9 @@ module.exports = {
     getUser,
     getUserBySessionId,
     createUser,
-    updateProfile,
+    updatePassword,
+    updatePicture,
+    checkPassword,
     loginUser,
     logoutUser,
     addSubscription,
