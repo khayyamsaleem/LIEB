@@ -49,7 +49,7 @@ const p5a = {
 }
 
 const p3a = {
-    content: "There is no earthly flame that can destroy the royal beard",
+    content: "There is no earthly fire that can destroy the royal beard",
     poster: userThree.username
 }
 const p3b = {
