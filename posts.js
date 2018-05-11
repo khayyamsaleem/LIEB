@@ -47,6 +47,11 @@ async function getPostsBySubscriptions (subscriptions) {
     });
 }
 
+async function getPostById(postId) {
+    const post = await mongo("posts");
+    return  await post.findOne({"_id" : postId});
+}
+
 async function deletePost (postId) {
     // Get the user collection
     const posts = await mongo("posts");
@@ -127,6 +132,7 @@ async function removeReactionFromPost (postId, username, reactionType) {
 module.exports = {
   createPost,
   getPostsBySubscriptions,
+  getPostById,
   deletePost,
   updatePost,
   addReactionToPost,

@@ -55,7 +55,15 @@ module.exports = app => {
   });
 
   app.delete("/posts/:postId", (req, res) => {
-    // TODO: delete a post
+    const user = req.params.currentUser;
+    const post = posts.getPostById(req.params.postId);
+    
+    if (post.poster === user._id) {
+        // Perform the deletion
+        const good = await posts.deletePost(postId);
+        if (good) res.status(200).end();
+        else res.status(500).json({err: "unable to delete post"});
+    } else res.status(500).json({err: "deletion is not authorized"});
   });
 
   // Messages
