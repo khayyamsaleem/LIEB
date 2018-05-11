@@ -1,21 +1,36 @@
 const client = require('mongodb').MongoClient;
+const mongoSettings = require('./mongoSettings.json')
 
 // The connection info
 let _connection = undefined;
 let _db = undefined;
 
-// Gets the database connection
-async function get(db_name, coll_name) {
+async function connect () {
+  if (_connection === undefined) {
+      console.log("Connecting to db...");
+      _connection = await client.connect(mongoSettings.serverUrl);
+      _db = await _connection.db(mongoSettings.database);
+  }
+}
+
+// Gets a database collection.
+async function collection (coll_name) {
     if (_connection === undefined) {
-        console.log("Connecting to db...");
-        _connection = await client.connect("mongodb://localhost:27017");
-        console.log("Accessing database...");
-        _db = await _connection.db(db_name);
+      await connect();
     }
 
-    console.log("Accessing collection...");
     return await _db.collection(coll_name);
 }
 
-module.exports = get;
+async function clear () {
+    if (_connection !== undefined) {
+      await connect();
+    }
 
+    return await _db.dropDatabase();
+}
+
+module.exports = {
+  collection,
+  clear
+};
