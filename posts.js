@@ -38,7 +38,13 @@ async function getPostsBySubscriptions (subscriptions) {
 
     console.log(subscriptions);
     // Gather all posts
-    return posts.find({"poster" : {"$in" : subscriptions}}).sort({"post_time" : 1}).toArray();
+    let postsBySubscriptions = await posts.find({"poster" : {"$in" : subscriptions}}).sort({"post_time" : 1}).toArray();
+
+    return postsBySubscriptions.map((post) => {
+      post.post_time = new Date(post.post_time * 1000).toString();
+      post.update_time = new Date(post.update_time * 1000).toString();
+      return post;
+    });
 }
 
 async function deletePost (postId) {
