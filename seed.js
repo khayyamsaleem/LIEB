@@ -86,7 +86,7 @@ async function seed () {
 
   console.log("Creating post.");
   // Create post for userOne.
-  await posts.createPost(post);
+  const worked = await posts.createPost(post);
   await posts.createPost(p4a);
   await posts.createPost(p4b);
   await posts.createPost(p5a);

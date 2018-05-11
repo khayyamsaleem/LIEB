@@ -5,6 +5,7 @@ const middleware = require('../middleware');
 
 module.exports = app => {
   // Posts
+  app.use("/posts", middleware.requireLoginApiMiddleware);
   app.post("/posts", async (req, res) => {
     const p = {
         poster: req.currentUser.username,
@@ -15,12 +16,16 @@ module.exports = app => {
     if (req.files && req.files.attachment){
       const att = req.files.attachment;
       p.attachments.push(att);
-      path = "public/post_attachment/" + req.body.poster + '.' + req.files.attachment.name.split('.').pop();
+      path = "public/post_attachment/" + req.currentUser.username + '.' + req.files.attachment.name.split('.').pop();
       await att.mv(path);
     }
     const chk = await posts.createPost(p)
-    if (chk) res.status(200).end()
-    else res.status(500).json({err: "unable to add post to database"});
+    if (chk) {
+      res.redirect('/');
+      // res.status(200).end()
+    } else {
+      res.status(500).json({err: "unable to add post to database"});
+    }
   });
 
   app.put("/posts/:postId", async (req, res) => {
@@ -34,7 +39,7 @@ module.exports = app => {
   app.post("/posts/:postId/react", async (req, res) => {
     const p_id = req.params.postId;
     const r = req.body.reaction;
-    const u = req.params.currentUser.username;
+    const u = req.currentUser.username;
     const chk = await posts.addReactionToPost(p_id, u, r);
     if (chk) res.status(200).end();
     else res.status(500).json({err: "unable to add reaction to post"});
@@ -57,7 +62,7 @@ module.exports = app => {
   app.post("/messages/:toUser", (req, res) => {
     // TODO: create a new message from the currently logged in
     // user to the user in the url
-
+    
   });
 
   app.use("/updatePassword", middleware.requireLoginApiMiddleware);

@@ -26,8 +26,7 @@ async function createPost (post) {
     try {
         // Add the user
         let res = await posts.insert(post);
-
-        return res.numInserted > 0;
+        return res.insertedCount > 0;
     } catch (ex) {
         return false;
     }
