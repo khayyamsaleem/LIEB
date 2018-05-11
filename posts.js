@@ -2,12 +2,13 @@ const mongo = require('./mongo').collection;
 
 async function createPost (post) {
     // Basic validation
-    if (post === undefined)
+    if (post === undefined){
         return false;
-    else if (post.content === undefined || typeof post.content != "string")
+    } else if (post.content === undefined || typeof post.content != "string"){
         return false;
-    else if (post.poster === undefined)
+    }else if (post.poster === undefined){
         return false;
+    }   
 
     // Get the user collection
     const posts = await mongo("posts");

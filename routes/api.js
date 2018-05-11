@@ -7,13 +7,17 @@ module.exports = app => {
   // Posts
   app.post("/posts", async (req, res) => {
     const p = {
-        title: req.body.title,
-        poster: req.body.poster,
+        poster: req.currentUser.username,
         content: req.body.content,
         attachments: []
     }
-    if (req.files)
-      p.attachments.push(req.files.att);
+    let path = undefined;
+    if (req.files && req.files.attachment){
+      const att = req.files.attachment;
+      p.attachments.push(att);
+      path = "public/post_attachment/" + req.body.poster + '.' + req.files.attachment.name.split('.').pop();
+      await att.mv(path);
+    }
     const chk = await posts.createPost(p)
     if (chk) res.status(200).end()
     else res.status(500).json({err: "unable to add post to database"});
@@ -53,6 +57,7 @@ module.exports = app => {
   app.post("/messages/:toUser", (req, res) => {
     // TODO: create a new message from the currently logged in
     // user to the user in the url
+
   });
 
   app.use("/updatePassword", middleware.requireLoginApiMiddleware);

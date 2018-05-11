@@ -10,6 +10,11 @@ module.exports = app => {
     res.render("login");
   });
 
+  app.use("/posts_form", middleware.requireLoginMiddleware);
+  app.get("/posts_form", (req, res) => {
+    res.render("post");
+  })
+
   app.post("/login", async (req, res) => {
     const sessionId = await users.loginUser(req.body.username, req.body.password);
     if (sessionId) {
