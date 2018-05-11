@@ -38,7 +38,8 @@ async function createUser (user) {
     const users = await mongo("users");
 
     // No sessions by default
-    user.sessions = []
+    user.sessions = [];
+    user.subscriptions = [];
     user.password = await bcrypt.hash(user.password, saltRounds);
 
     // Add the user
@@ -127,11 +128,9 @@ async function addSubscription (username, userToSub) {
 
     // Get the user collection
     const users = await mongo("users");
-    if (users === undefined)
-        return;
 
     try {
-        let res = await users.update({"username" : username}, {"$push" : {"subscription_list" : userToSub["_id"]}});
+        let res = await users.update({"username" : username}, {"$push" : {"subscriptions" : userToSub}});
         return res.modifiedCount > 0;
     } catch (ex) {
         return false;
@@ -149,7 +148,7 @@ async function removeSubscription (username, userToUnsub) {
 
     // Remove the item
     try {
-        let res = await users.update({"username" : username}, {"$pull" : {"subscription_list" : userToUnsub["_id"]}});
+        let res = await users.update({"username" : username}, {"$pull" : {"subscriptions" : userToUnsub}});
         return res.modifiedCount > 0;
     } catch (ex) {
         return false;

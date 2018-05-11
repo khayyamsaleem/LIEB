@@ -71,9 +71,17 @@ module.exports = app => {
       })
     } else {
       try {
+        let pathToProfilePic = undefined;
+        if (req.files && req.files.profilePicture) {
+          const profilePicture = req.files.profilePicture;
+          const path = "public/profile_pic/" + username;
+          await profilePicture.mv(path);
+          pathToProfilePic = path;
+        }
         const userToCreate = {
           username: username,
-          password: password
+          password: password,
+          picture: pathToProfilePic
         };
 
         const createdUser = await users.createUser(userToCreate);
@@ -93,8 +101,12 @@ module.exports = app => {
   });
 
   app.use("/", requireLoginMiddleware);
-  app.get("/", function (req, res) {
-    const postsBySubscription = posts.getPostsBySubscriptions(req.currentUser.subscriptions);
+  app.get("/", async function (req, res) {
+    console.log(JSON.stringify(req.currentUser));
+    const postsBySubscription = await posts.getPostsBySubscriptions(req.currentUser.subscriptions);
+    if (!req.currentUser.picture) {
+      req.currentUser.picture = "public/default_profile_pic.png";
+    }
     res.render("home", {
       user: req.currentUser,
       posts: postsBySubscription
@@ -103,8 +115,8 @@ module.exports = app => {
 
   app.use("/messages/:username", requireLoginMiddleware);
   app.get("/messages/:username", async (req, res) => {
-    const messages = messages.getMessagesConcerningUsers(req.currentUser, req.params.username);
-    const otherUser = users.getUser(req.params.username);
+    const messages = await messages.getMessagesConcerningUsers(req.currentUser, req.params.username);
+    const otherUser = await users.getUser(req.params.username);
     res.render("messages", {
       user: currentUser,
       other_user: otherUser,
@@ -115,7 +127,7 @@ module.exports = app => {
   app.use("/users/:username", requireLoginMiddleware);
   app.get("/users/:username", async (req, res) => {
     try {
-      const user = users.getUser(req.params.username);
+      const user = await users.getUser(req.params.username);
       const isCurrentUser = user.username === req.params.currentUser.username;
       res.render("profile", {
         user: user,

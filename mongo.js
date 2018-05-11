@@ -23,7 +23,7 @@ async function collection (coll_name) {
 }
 
 async function clear () {
-    if (_connection !== undefined) {
+    if (_connection === undefined) {
       await connect();
     }
 

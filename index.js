@@ -3,6 +3,7 @@ const app = express();
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const exphbs = require("express-handlebars");
+const fileUpload = require("express-fileupload");
 const static = express.static(__dirname + "/public");
 
 const configRoutes = require("./routes");
@@ -22,6 +23,7 @@ app.use(bodyParser.urlencoded({
 }));
 
 app.use(auth);
+app.use(fileUpload());
 
 configRoutes(app);
 

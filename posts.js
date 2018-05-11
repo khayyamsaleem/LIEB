@@ -36,8 +36,9 @@ async function getPostsBySubscriptions (subscriptions) {
     // Get the user collection
     const posts = await mongo("posts");
 
+    console.log(subscriptions);
     // Gather all posts
-    return await posts.find({"poster" : {"$in" : subscriptions}}).sort({"post_time" : 1});
+    return posts.find({"poster" : {"$in" : subscriptions}}).sort({"post_time" : 1}).toArray();
 }
 
 async function deletePost (postId) {
