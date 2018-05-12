@@ -26,7 +26,7 @@ async function getMessagesConcerningUsers (userOne, userTwo) {
         // a2b = await messages.find({"from" : userOne, "to" : userTwo});
         // b2a = await messages.find({"to" : userOne, "from" : userTwo});
         users = [userOne, userTwo];
-        mssgs = await messages.find({"from" : {"$in" : users}, "to" : {"$in" : users}}).sort({"time": -1}).limit(50).toArray();
+        mssgs = await messages.find({"from" : {"$in" : users}, "to" : {"$in" : users}}).sort({"time": 1}).limit(50).toArray();
         return mssgs;
     } catch (ex) {
         console.log("this happened")
