@@ -2,7 +2,7 @@
   <img class="user_picture" height="50" width="50" src="{{ user.picture }}" alt="{{ user.username }} profile picture">
   <h1 class="user_info">{{ user.username }}</h1>
 </header>
-<main class="home_content">
+<main class="userlist_content">
   <nav class="navbar navbar-inverse">
     <div class="container-fluid">
       <div class="navbar-header">
@@ -25,29 +25,10 @@
       </div>
     </div>
   </nav>
-  <div class="poster-bucket">
-    <a href="/posts_form"><button class="new-poster">Create New Post!</button></a>
-  </div>
-  <ol id="post_list">
-    {{#each posts}}
-        <li>
-          <div class="post">
-            <h2 class="post_title">{{ this.title }}</h2>
-            <p class="post_metadata">posted by {{ this.poster }} at {{ this.post_time }}</p>
-            <p class="post_updated">last updated at {{ this.update_time }}</p>
-            <p class="post_content">{{ this.content }}</p>
-            <ol class="reactions">
-              {{#each this.reactions}}
-                <li><p class="reaction">{{ this.name }} - {{ this.count }}</p></li>
-              {{/each}}
-            </ol>
-            <ol class="attachments">
-              {{#each this.attachments}}
-                <li><img class = "attachment" src="{{ this }}"></li>
-              {{/each}}
-            </ol>
-          </div>
-        </li>
-    {{/each}}
+  <ol id="user_list">
+  {{#each all_users}}
+     <li><a href="/users/{{ this.username }}">{{ this.username }}</a></li>
+  {{/each}}
   </ol>
+
 </main>

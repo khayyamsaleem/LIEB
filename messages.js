@@ -34,7 +34,7 @@ async function getMessagesConcerningUsers (userOne, userTwo) {
     // res = Array.concat(a2b, b2a);
     // res.sort((a,b) => b.time - a.time);
 
-    return res;
+    return mssgs;
 }
 
 async function getMessagees(from) {

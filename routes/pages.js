@@ -107,6 +107,15 @@ module.exports = app => {
     });
   });
 
+  app.use("/all_users", middleware.requireLoginMiddleware);
+  app.get("/all_users", async function (req, res) {
+    const allUsers = await users.getAllUsers();
+    res.render("all_users", {
+        user: req.currentUser,
+        all_users: allUsers
+    });
+  });
+
   app.use("/messages/:username", middleware.requireLoginMiddleware);
   app.get("/messages/:username", async (req, res) => {
     const otherUser = await users.getUser(req.params.username);
