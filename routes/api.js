@@ -2,6 +2,7 @@ const posts = require('../posts');
 
 const users = require('../users');
 const middleware = require('../middleware');
+const messages = require('../messages');
 
 module.exports = app => {
   // Posts
@@ -91,12 +92,26 @@ module.exports = app => {
   });
 
   // Messages
-  app.post("/messages/:toUser", (req, res) => {
+  app.post("/messages/:toUser", async (req, res) => {
     // TODO: create a new message from the currently logged in
     // user to the user in the url
-    const msg = "";
-
+    res.render('/messages', {
+        user: req.currentUser.username,
+        other_user: req.params.toUser,
+        messages_list: await messages.getMessagesConcerningUsers(req.currentUser.username, req.params.toUser)
+    })
   });
+
+  app.post("/create_message/:toUser", async (req, res) => {
+    const msg = req.body.content;
+    const u_id = req.currentUser._id;
+    const o_id = await users.getUser(req.params.toUser)._id;
+    console.log(req.currentUser.username, "sending msg to", req.params.toUser);
+    await messages.createMessage(msg, u_id, o_id);
+      console.log("HERE")
+    console.log(await messages.getMessagesConcerningUsers(req.currentUser.username, req.params.toUser));
+    res.redirect("/messages/"+req.params.toUser);
+  })
 
   app.use("/updateEmail", middleware.requireLoginApiMiddleware);
   app.post("/updateEmail", async (req, res) => {
