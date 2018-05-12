@@ -140,6 +140,7 @@ module.exports = app => {
         const isCurrentUser = user.username === req.currentUser.username;
         res.render("profile", {
           user: user,
+          currentUser: req.currentUser.username,
           subscribed: req.currentUser.subscriptions.includes(user.username),
           isCurrentUser: isCurrentUser,
           posts: ps
