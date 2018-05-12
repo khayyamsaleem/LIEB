@@ -111,7 +111,7 @@ async function seed () {
   await messages.createMessage("u gna go to the club friday?", userThree.username, userTwo.username);
   await messages.createMessage("dayum gyal whatchu thank", userTwo.username, userThree.username);
   await messages.createMessage("u aint change u aint nva gna change smh", userThree.username, userTwo.username);
-  await messages.createMessage("🙈", userFour.username, userOne.username);
+  await messages.createMessage("🙈", useTwo.username, userThree.username);
 
   console.log("Done.");
 

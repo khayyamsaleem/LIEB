@@ -108,11 +108,10 @@ module.exports = app => {
 
   app.post("/create_message/:toUser", async (req, res) => {
     const msg = req.body.content;
-    const u_id = req.currentUser._id;
-    const o_id = await users.getUser(req.params.toUser)._id;
+    const u_id = req.currentUser.username;
+    const o_id = req.params.toUser;
     console.log(req.currentUser.username, "sending msg to", req.params.toUser);
-    await messages.createMessage(msg, u_id, o_id);
-      console.log("HERE")
+    const mshg = await messages.createMessage(msg, u_id, o_id);
     console.log(await messages.getMessagesConcerningUsers(req.currentUser.username, req.params.toUser));
     res.redirect("/messages/"+req.params.toUser);
   })
