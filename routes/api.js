@@ -54,8 +54,22 @@ module.exports = app => {
     else res.status(500).json({err: "unable to remove reaction from post"});
   });
 
-  app.delete("/posts/:postId", (req, res) => {
-    // TODO: delete a post
+  app.get("/posts/:postId", async (req, res) => {
+    console.log("Deleting post", req.params.postId);
+
+    const user = req.currentUser;
+    const post = await posts.getPostById(req.params.postId);
+    
+    console.log("Is defined as", post);
+
+    console.log("compare", post.poster, "to", user.username);
+
+    if (post.poster === user.username) {
+        // Perform the deletion
+        const good = await posts.deletePost(post._id);
+        if (good) res.redirect("/users/" + user.username);
+        else res.status(500).json({err: "unable to delete post"});
+    } else res.status(500).json({err: "deletion is not authorized"});
   });
 
   // Messages

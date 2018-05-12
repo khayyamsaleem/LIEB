@@ -26,6 +26,31 @@
         </div>
       </div>
     </nav>
+    <section id="user-posts">
+      <ol id="post_list">
+        {{#each posts}}
+            <li>
+              <div class="post">
+                <h2 class="post_title">{{ this.title }}</h2>
+                <p class="post_metadata">posted by {{ this.poster }} at {{ this.post_time }}</p>
+                <p class="post_updated">last updated at {{ this.update_time }}</p>
+                <p class="post_content">{{ this.content }}</p>
+                <ol class="reactions">
+                  {{#each this.reactions}}
+                    <li><p class="reaction">{{ this.name }} - {{ this.count }}</p></li>
+                  {{/each}}
+                </ol>
+                <ol class="attachments">
+                  {{#each this.attachments}}
+                    <li><img class = "attachment" src="{{ this.source }}" alt="{{ this.alt }}"></li>
+                  {{/each}}
+                </ol>
+                <a data-method="delete" href="/posts/{{ this._id }}" data-confirm="Are you sure?" rel="nofollow">Delete post</a>
+              </div>
+            </li>
+        {{/each}}
+      </ol>
+    </section>
     <section id="change-password-section">
       <h2>Change Password</h2>
       <form

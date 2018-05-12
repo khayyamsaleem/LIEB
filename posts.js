@@ -1,4 +1,5 @@
 const mongo = require('./mongo').collection;
+const mongodb = require('mongodb')
 
 async function createPost (post) {
     // Basic validation
@@ -47,6 +48,11 @@ async function getPostsBySubscriptions (subscriptions) {
     });
 }
 
+async function getPostById(postId) {
+    const post = await mongo("posts");
+    return await post.findOne({"_id" : new mongodb.ObjectId(postId)});
+}
+
 async function deletePost (postId) {
     // Get the user collection
     const posts = await mongo("posts");
@@ -56,7 +62,7 @@ async function deletePost (postId) {
         let res = await posts.remove({"_id": postId});
 
         // Check whether or not something was removed
-        return res.nRemoved > 0;
+        return res.result.n > 0;
     } catch (ex) {
         return false;
     }
@@ -127,6 +133,7 @@ async function removeReactionFromPost (postId, username, reactionType) {
 module.exports = {
   createPost,
   getPostsBySubscriptions,
+  getPostById,
   deletePost,
   updatePost,
   addReactionToPost,
