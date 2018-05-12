@@ -60,10 +60,6 @@ module.exports = app => {
     const user = req.currentUser;
     const post = await posts.getPostById(req.params.postId);
     
-    console.log("Is defined as", post);
-
-    console.log("compare", post.poster, "to", user.username);
-
     if (post.poster === user.username) {
         // Perform the deletion
         const good = await posts.deletePost(post._id);
@@ -76,7 +72,7 @@ module.exports = app => {
   app.post("/messages/:toUser", (req, res) => {
     // TODO: create a new message from the currently logged in
     // user to the user in the url
-    
+
   });
 
   app.use("/updatePassword", middleware.requireLoginApiMiddleware);
