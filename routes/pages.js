@@ -148,6 +148,14 @@ module.exports = app => {
         // Get the user's posts
         const ps = await posts.getPostsBySubscriptions([req.params.username]);
 
+        const updatedPosts = ps.map((post) => {
+          let reactions = {};
+          reactions['likes'] = post.reactions.like.length;
+          reactions['hates'] = post.reactions.hate.length;
+          post.reactions = reactions;
+          return post;
+        });
+
         // Check whether or not the user is accessing their own page
         const isCurrentUser = user.username === req.currentUser.username;
         res.render("profile", {

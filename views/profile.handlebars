@@ -37,13 +37,12 @@
                   <p class="post_updated">last updated at {{ this.update_time }}</p>
                   <p class="post_content">{{ this.content }}</p>
                   <ol class="reactions">
-                    {{#each this.reactions}}
-                      <li><p class="reaction">{{ this.name }} - {{ this.count }}</p></li>
-                    {{/each}}
+                    <li>LIKE - {{ this.reactions.likes }}</li>
+                    <li>HATE - {{ this.reactions.hates }}</li>
                   </ol>
                   <ol class="attachments">
                     {{#each this.attachments}}
-                      <li><img class = "attachment" src="{{ this.source }}" alt="{{ this.alt }}"></li>
+                      <li><img class = "attachment" src="{{ this }}"></li>
                     {{/each}}
                   </ol>
                   <a data-method="delete" href="/posts/{{ this._id }}" data-confirm="Are you sure?" rel="nofollow">Delete post</a>
