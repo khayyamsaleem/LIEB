@@ -14,7 +14,6 @@ module.exports = app => {
     }
     if (req.files && req.files.attachment) {
       const att = req.files.attachment;
-      console.log(JSON.stringify(att));
       const path = "public/post_attachment/" + req.currentUser.username + '.' + att.name.split('.').pop();
       await att.mv(path);
       p.attachments.push(path);
@@ -59,7 +58,7 @@ module.exports = app => {
 
     const user = req.currentUser;
     const post = await posts.getPostById(req.params.postId);
-    
+
     if (post.poster === user.username) {
         // Perform the deletion
         const good = await posts.deletePost(post._id);
@@ -73,6 +72,74 @@ module.exports = app => {
     // TODO: create a new message from the currently logged in
     // user to the user in the url
 
+  });
+
+  app.use("/updateEmail", middleware.requireLoginApiMiddleware);
+  app.post("/updateEmail", async (req, res) => {
+    const newEmail = req.body.newEmail;
+
+    const errors = [];
+
+    if (newEmail === undefined || newEmail === "") {
+      errors.push('Email must be provided');
+    }
+
+    if (errors.length > 0) {
+      res.status(500).json({
+        errors: errors
+      })
+    } else {
+      try {
+        const updateSuccess = await users.updateUserProfile(req.currentUser.username, { email: newEmail });
+        if (updateSuccess) {
+          res.status(200).json({
+            message: "Email updated."
+          });
+        } else {
+          res.status(500).json({
+            errors: ['Failed to update user email.']
+          });
+        }
+      } catch (e) {
+        res.status(500).json({
+          errors: [`Failed to update user email, error: ${e}`]
+        });
+      }
+    }
+  });
+
+  app.use("/updateDesc", middleware.requireLoginApiMiddleware);
+  app.post("/updateDesc", async (req, res) => {
+    const newDesc = req.body.newDesc;
+
+    const errors = [];
+
+    if (newDesc === undefined || newDesc === "") {
+      errors.push('Description must be provided');
+    }
+
+    if (errors.length > 0) {
+      res.status(500).json({
+        errors: errors
+      })
+    } else {
+      try {
+        const updateSuccess = await users.updateUserProfile(req.currentUser.username, { desc: newDesc });
+        if (updateSuccess) {
+          res.status(200).json({
+            message: "Description updated."
+          });
+        } else {
+          res.status(500).json({
+            errors: ['Failed to update user description.']
+          });
+        }
+      } catch (e) {
+        res.status(500).json({
+          errors: [`Failed to update user description, error: ${e}`]
+        });
+      }
+    }
   });
 
   app.use("/updatePassword", middleware.requireLoginApiMiddleware);

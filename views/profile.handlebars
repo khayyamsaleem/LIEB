@@ -10,7 +10,7 @@
           <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
-            <span class="icon-bar"></span> 
+            <span class="icon-bar"></span>
           </button>
           <a class="navbar-brand" href="/">LIEB Floorplan</a>
         </div>
@@ -75,6 +75,27 @@
         <input type="submit" value="Update" />
       </form>
     </section>
+    <section id="change-email-section">
+      <h2>Change Email</h2>
+      <form
+        id="change-email"
+        onsubmit="updateUserEmail(event)">
+        <label for="emailInput">New Email:</label>
+        <input id="emailInput" type="email" name="newEmail" />
+        <input type="submit" value="Update" />
+      </form>
+    </section>
+    <section id="change-desc-section">
+      <h2>Change Description</h2>
+      <form
+        id="change-desc"
+        onsubmit="updateUserDesc(event)">
+        <label for="descInput">New Description:</label>
+        <input id="descInput" type="text" name="newDesc" />
+        <input type="submit" value="Update" />
+      </form>
+    </section>
+
     <section class="profile_errors">
       <ul id="profile_error_list">
       </ul>

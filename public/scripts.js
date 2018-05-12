@@ -81,3 +81,82 @@ function updateUserPicture (e) {
     }
   });
 }
+
+function updateUserEmail (e) {
+  e.preventDefault();
+
+  const emailForm = document.getElementById('change-email');
+  const email = document.getElementById('emailInput').value;
+  const errorList = document.getElementById("profile_error_list");
+  const messageP = document.getElementById('profile_message')
+
+  errorList.innerHTML = "";
+  messageP.innerHTML = "";
+
+  const request = new Request('http://localhost:3000/updateEmail', {
+    method: 'POST',
+    body: JSON.stringify({
+      newEmail: newEmail,
+    }),
+    headers: {
+      'content-type': 'application/json'
+    },
+    credentials: 'same-origin'
+  });
+
+  fetch(request).then((response) => {
+    emailForm.reset();
+    if (response.status === 200) {
+      response.json().then((body) => {
+        messageP.innerHTML = body.message;
+      });
+    } else if (response.status === 500) {
+      response.json().then((body) => {
+        body.errors.forEach((error) => {
+          const errorLi = document.createElement("LI");
+          const errorText = document.createTextNode(error);
+          errorLi.appendChild(errorText);
+          errorList.appendChild(errorLi);
+        });
+      });
+    }
+  });
+}
+
+function updateUserDesc (e) {
+  e.preventDefault();
+
+  const descForm = document.getElementById('change-desc');
+  const desc = document.getElementById('descInput').value;
+  const errorList = document.getElementById("profile_error_list");
+  const messageP = document.getElementById('profile_message')
+
+  errorList.innerHTML = "";
+  messageP.innerHTML = "";
+
+  const request = new Request('http://localhost:3000/updateDesc', {
+    method: 'POST',
+    body: {
+      newDesc: desc
+    },
+    credentials: 'same-origin'
+  });
+
+  fetch(request).then((response) => {
+    descForm.reset();
+    if (response.status === 200) {
+      response.json().then((body) => {
+        messageP.innerHTML = body.message;
+      });
+    } else if (response.status === 500) {
+      response.json().then((body) => {
+        body.errors.forEach((error) => {
+          const errorLi = document.createElement("LI");
+          const errorText = document.createTextNode(error);
+          errorLi.appendChild(errorText);
+          errorList.appendChild(errorLi);
+        });
+      });
+    }
+  });
+}

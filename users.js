@@ -70,12 +70,12 @@ async function updatePassword (user, newPassword) {
     }
 }
 
-async function updatePicture (user, newPicturePath) {
+async function updateUserProfile (user, newProfile) {
     // Get the user collection
     const users = await mongo("users");
 
     try {
-        let res = await users.updateOne({ username: user }, { $set: { picture: newPicturePath }});
+        let res = await users.updateOne({ username: user }, { $set: newProfile });
         return res.modifiedCount > 0;
     } catch (ex) {
         return false;
@@ -183,7 +183,7 @@ module.exports = {
     getUserBySessionId,
     createUser,
     updatePassword,
-    updatePicture,
+    updateUserProfile,
     checkPassword,
     loginUser,
     logoutUser,
