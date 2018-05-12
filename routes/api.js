@@ -94,6 +94,7 @@ module.exports = app => {
   app.post("/messages/:toUser", (req, res) => {
     // TODO: create a new message from the currently logged in
     // user to the user in the url
+    const msg = "";
 
   });
 
