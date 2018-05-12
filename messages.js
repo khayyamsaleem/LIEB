@@ -13,7 +13,7 @@ async function createMessage (message, from_id, to_id) {
     try {
         let res = await messages.insert(messageDoc);
         return res.insertedCount > 0;
-    } catch (ex) { 
+    } catch (ex) {
         console.log(ex);
         return false;
     }
@@ -26,7 +26,7 @@ async function getMessagesConcerningUsers (userOne, userTwo) {
         // a2b = await messages.find({"from" : userOne, "to" : userTwo});
         // b2a = await messages.find({"to" : userOne, "from" : userTwo});
         users = [userOne, userTwo];
-        mssgs = await messages.find({"from" : {"$in" : users}, "to" : {"$in" : users}}).sort({"time": -1}).limit(50)
+        mssgs = await messages.find({"from" : {"$in" : users}, "to" : {"$in" : users}}).sort({"time": -1}).limit(50).toArray()
     } catch (ex) {
         return [];
     }
