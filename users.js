@@ -143,6 +143,11 @@ async function logoutUser (sessionId) {
     }
 }
 
+async function getAllUsers(){
+    const users = await mongo("users");
+    return await users.find().toArray();
+}
+
 async function addSubscription (username, userToSub) {
     if (typeof username != "string")
         return false;
@@ -181,6 +186,7 @@ async function removeSubscription (username, userToUnsub) {
 module.exports = {
     getUser,
     getUserBySessionId,
+    getAllUsers,
     createUser,
     updatePassword,
     updatePicture,

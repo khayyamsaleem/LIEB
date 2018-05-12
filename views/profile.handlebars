@@ -17,10 +17,10 @@
         <div class="collapse navbar-collapse" id="myNavbar">
           <ul class="nav navbar-nav">
             <li><a href="/">Home</a></li>
-            <li><a href="/messages/{{ user.username }}">Messages</a></li>
+            <li><a href="/all_users">All Users</a></li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
-            <li class="active"><a href="/users/{{ user.username }}"><span class="glyphicon glyphicon-user"></span> My Profile</a></li>
+            <li class="active"><a href="/users/{{ user.username }}"><span class="glyphicon glyphicon-user"></span> Profile</a></li>
             <li><a href="/logout"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
           </ul>
         </div>
@@ -51,6 +51,7 @@
         {{/each}}
       </ol>
     </section>
+    {{#if isCurrentUser}}
     <section id="change-password-section">
       <h2>Change Password</h2>
       <form
@@ -79,6 +80,9 @@
       <ul id="profile_error_list">
       </ul>
     </section>
+    {{else}}
+        <a href="/messages/{{ user.username }}">Send a message!</a>
+    {{/if}}
   </main>
 {{else}}
   <header class="profile_header">

@@ -59,7 +59,7 @@ module.exports = app => {
 
     const user = req.currentUser;
     const post = await posts.getPostById(req.params.postId);
-    
+
     if (post.poster === user.username) {
         // Perform the deletion
         const good = await posts.deletePost(post._id);
