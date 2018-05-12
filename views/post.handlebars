@@ -2,11 +2,15 @@
     <h1>New Post</h1>
 </header>
 <main class="create-post-content">
-    <form id="create-post" method="post" action="/posts">
+    <form
+      id="create-post"
+      method="post"
+      action="/posts"
+      encType="multipart/form-data">
         <label for="contentInput">CONTENT:</label>
         <input id="contentInput" type="text" name="content" />
         <label for="attachmentInput">Attachments:</label>
-        <input id="attachmentInput" accept="*" type="file" name="attachments" />
+        <input id="attachmentInput" accept="*" type="file" name="attachment" />
         <input type="submit" value="create" />
     </form>
 </main>

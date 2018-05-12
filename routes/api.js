@@ -12,12 +12,12 @@ module.exports = app => {
         content: req.body.content,
         attachments: []
     }
-    let path = undefined;
-    if (req.files && req.files.attachment){
+    if (req.files && req.files.attachment) {
       const att = req.files.attachment;
-      p.attachments.push(att);
-      path = "public/post_attachment/" + req.currentUser.username + '.' + req.files.attachment.name.split('.').pop();
+      console.log(JSON.stringify(att));
+      const path = "public/post_attachment/" + req.currentUser.username + '.' + att.name.split('.').pop();
       await att.mv(path);
+      p.attachments.push(path);
     }
     const chk = await posts.createPost(p)
     if (chk) {

@@ -101,6 +101,7 @@ module.exports = app => {
     if (!req.currentUser.picture) {
       req.currentUser.picture = "public/default_profile_pic.png";
     }
+    console.log(JSON.stringify(postsBySubscription));
     res.render("home", {
       user: req.currentUser,
       posts: postsBySubscription
