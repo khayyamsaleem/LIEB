@@ -160,7 +160,6 @@ async function addSubscription (username, userToSub) {
         let res = await users.update({"username" : username}, {"$push" : {"subscriptions" : userToSub}});
         return res.modifiedCount > 0;
     } catch (ex) {
-        console.log(ex);
         return false;
     }
 }
