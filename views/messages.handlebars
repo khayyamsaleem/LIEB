@@ -8,7 +8,7 @@
         <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
-          <span class="icon-bar"></span> 
+          <span class="icon-bar"></span>
         </button>
         <a class="navbar-brand" href="/">LIEB Navigation</a>
       </div>
@@ -27,27 +27,20 @@
   <ol id="messages_list">
     {{#each messages}}
         <li>
-          <div
-            {{#if this.sentByCurrent}}
-              class="message_current"
-            {{else}}
-              class="message_other"
-            {{/if}}
-          >
-            <p class="message_metadata">sent at {{ this.send_time }}</p>
-            <p class="message_content">{{ this.content }}</p>
+          <div>
+            <p class="message_metadata">sent at {{ this.time }} by {{ this.from }}</p>
+            <p class="message_content">{{ this.msg }}</p>
           </div>
         </li>
     {{/each}}
   </ol>
-  <>
-    <form
-      id="create-msg"
-      method="post"
-      action="/create_message/{{ other_user }}"
-      encType="multipart/form-data">
-        <label for="contentInput">CONTENT:</label>
-        <input id="contentInput" type="text" name="content" />
-        <input type="submit" value="create" />
-    </form>
+  <form
+    id="create-msg"
+    method="post"
+    action="/create_message/{{ other_user }}"
+    encType="multipart/form-data">
+      <label for="contentInput">CONTENT:</label>
+      <input id="contentInput" type="text" name="content" />
+      <input type="submit" value="create" />
+  </form>
 </main>

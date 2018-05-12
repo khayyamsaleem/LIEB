@@ -131,7 +131,8 @@ module.exports = app => {
   app.use("/messages/:username", middleware.requireLoginMiddleware);
   app.get("/messages/:username", async (req, res) => {
     const otherUser = await users.getUser(req.params.username);
-    const message = await messages.getMessagesConcerningUsers(req.currentUser._id, otherUser._id);
+    const message = await messages.getMessagesConcerningUsers(req.currentUser.username, otherUser.username);
+    console.log(JSON.stringify(message));
     res.render("messages", {
       user: req.currentUser.username,
       other_user: otherUser.username,
