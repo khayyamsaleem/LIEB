@@ -101,9 +101,21 @@ module.exports = app => {
     if (!req.currentUser.picture) {
       req.currentUser.picture = "public/default_profile_pic.png";
     }
+
+    const updatedPosts = postsBySubscription.map((post) => {
+      let reactions = {};
+      let userLikes = post.reactions.like.includes(req.currentUser.username);
+      let userHates = post.reactions.hate.includes(req.currentUser.username);
+      reactions['likes'] = post.reactions.like.length;
+      reactions['hates'] = post.reactions.hate.length;
+      post.reactions = reactions;
+      post.likeFunction = userLikes ? "removeLike" : "addLike";
+      post.hateFunction = userHates ? "removeHate" : "addHate";
+      return post;
+    });
     res.render("home", {
       user: req.currentUser,
-      posts: postsBySubscription
+      posts: updatedPosts,
     });
   });
 

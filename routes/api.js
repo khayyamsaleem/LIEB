@@ -27,6 +27,7 @@ module.exports = app => {
     }
   });
 
+  app.use("/posts/:postId", middleware.requireLoginApiMiddleware);
   app.put("/posts/:postId", async (req, res) => {
     const p_id = req.params.postId;
     const new_content = req.body.content;
@@ -35,6 +36,7 @@ module.exports = app => {
     else res.status(500).json({err: "unable to update post"})
   });
 
+  app.use("/posts/:postId/react", middleware.requireLoginApiMiddleware);
   app.post("/posts/:postId/react", async (req, res) => {
     const p_id = req.params.postId;
     const r = req.body.reaction;
@@ -44,15 +46,17 @@ module.exports = app => {
     else res.status(500).json({err: "unable to add reaction to post"});
   });
 
-  app.delete("/posts/:postId/react", async (req, res) => {
+  app.use("/posts/:postId/removeReact", middleware.requireLoginApiMiddleware);
+  app.post("/posts/:postId/removeReact", async (req, res) => {
     const p_id = req.params.postId;
     const r = req.body.reaction;
-    const u = req.params.currentUser.username;
+    const u = req.currentUser.username;
     const chk = await posts.removeReactionFromPost(p_id, u, r);
     if (chk) res.status(200).end()
     else res.status(500).json({err: "unable to remove reaction from post"});
   });
 
+  app.use("/posts", middleware.requireLoginApiMiddleware);
   app.get("/posts/:postId", async (req, res) => {
     console.log("Deleting post", req.params.postId);
 
