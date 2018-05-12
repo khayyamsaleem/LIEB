@@ -37,9 +37,8 @@
             <p class="post_updated">last updated at {{ this.update_time }}</p>
             <p class="post_content">{{ this.content }}</p>
             <ol class="reactions">
-              {{#each this.reactions}}
-                <li><p class="reaction">{{ this.name }} - {{ this.count }}</p></li>
-              {{/each}}
+              <li><button onclick="{{likeFunction}}('{{this._id}}')">LIKE - {{ this.reactions.likes }}</a></li>
+              <li><button onclick="{{hateFunction}}('{{this._id}}')">HATE - {{ this.reactions.hates }}</a></li>
             </ol>
             <ol class="attachments">
               {{#each this.attachments}}

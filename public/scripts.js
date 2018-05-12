@@ -160,3 +160,79 @@ function updateUserDesc (e) {
     }
   });
 }
+
+function addLike (postId) {
+  const request = new Request('http://localhost:3000/posts/' + postId + '/react', {
+    method: 'POST',
+    body: JSON.stringify({
+      reaction: 'like'
+    }),
+    headers: {
+      'content-type': 'application/json'
+    },
+    credentials: 'same-origin'
+  });
+
+  fetch(request).then((response) => {
+    window.location.reload();
+  }).catch((err) => {
+    window.location.reload();
+  });
+}
+
+function removeLike (postId) {
+  const request = new Request('http://localhost:3000/posts/' + postId + '/removeReact', {
+    method: 'POST',
+    body: JSON.stringify({
+      reaction: 'like'
+    }),
+    headers: {
+      'content-type': 'application/json'
+    },
+    credentials: 'same-origin'
+  });
+
+  fetch(request).then((response) => {
+    window.location.reload();
+  }).catch((err) => {
+    window.location.reload();
+  });
+}
+
+function addHate (postId) {
+  const request = new Request('http://localhost:3000/posts/' + postId + '/react', {
+    method: 'POST',
+    body: JSON.stringify({
+      reaction: 'hate'
+    }),
+    headers: {
+      'content-type': 'application/json'
+    },
+    credentials: 'same-origin'
+  });
+
+  fetch(request).then((response) => {
+    window.location.reload();
+  }).catch((err) => {
+    window.location.reload();
+  });
+}
+
+function removeHate (postId) {
+  const request = new Request('http://localhost:3000/posts/' + postId + '/removeReact', {
+    method: 'POST',
+    body: JSON.stringify({
+      reaction: 'hate'
+    }),
+    headers: {
+      'content-type': 'application/json'
+    },
+    credentials: 'same-origin'
+  });
+
+  fetch(request).then((response) => {
+    window.location.reload();
+  }).catch((err) => {
+    window.location.reload();
+  });
+}
