@@ -101,7 +101,6 @@ module.exports = app => {
     if (!req.currentUser.picture) {
       req.currentUser.picture = "public/default_profile_pic.png";
     }
-    console.log(JSON.stringify(postsBySubscription));
     res.render("home", {
       user: req.currentUser,
       posts: postsBySubscription
@@ -123,17 +122,16 @@ module.exports = app => {
   app.get("/users/:username", async (req, res) => {
     try {
       // Get the current user if it exists
-      console.log("Gathering info on user", req.params.username);
       const user = await users.getUser(req.params.username);
-      console.log("Got back", user);
       if (user) {
         // Get the user's posts
         const ps = await posts.getPostsBySubscriptions([req.params.username]);
-        
+
         // Check whether or not the user is accessing their own page
         const isCurrentUser = user.username === req.currentUser.username;
         res.render("profile", {
           user: user,
+          subscribed: req.currentUser.subscriptions.includes(user.username),
           isCurrentUser: isCurrentUser,
           posts: ps
         });
@@ -143,7 +141,6 @@ module.exports = app => {
         });
       }
     } catch (e) {
-      console.log(e);
       res.render("profile", {
         missingUser: req.params.username
       });

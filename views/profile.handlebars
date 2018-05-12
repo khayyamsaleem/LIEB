@@ -1,106 +1,160 @@
 {{#if user}}
-  <header class="profile_header">
-    <h1>Profile - {{user.username}}</h1>
-  </header>
-  <main class="profile_content">
-    <p id="profile_message"></p>
-    <nav class="navbar navbar-inverse">
-      <div class="container-fluid">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand" href="/">LIEB Floorplan</a>
+  {{#if isCurrentUser }}
+    <header class="profile_header">
+      <h1>Profile - {{user.username}}</h1>
+    </header>
+    <main class="profile_content">
+      <p id="profile_message"></p>
+      <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">LIEB Floorplan</a>
+          </div>
+          <div class="collapse navbar-collapse" id="myNavbar">
+            <ul class="nav navbar-nav">
+              <li><a href="/">Home</a></li>
+              <li><a href="/messages/{{ user.username }}">Messages</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+              <li class="active"><a href="/users/{{ user.username }}"><span class="glyphicon glyphicon-user"></span> My Profile</a></li>
+              <li><a href="/logout"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
+            </ul>
+          </div>
         </div>
-        <div class="collapse navbar-collapse" id="myNavbar">
-          <ul class="nav navbar-nav">
-            <li><a href="/">Home</a></li>
-            <li><a href="/messages/{{ user.username }}">Messages</a></li>
-          </ul>
-          <ul class="nav navbar-nav navbar-right">
-            <li class="active"><a href="/users/{{ user.username }}"><span class="glyphicon glyphicon-user"></span> My Profile</a></li>
-            <li><a href="/logout"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
-          </ul>
-        </div>
-      </div>
-    </nav>
-    <section id="user-posts">
-      <ol id="post_list">
-        {{#each posts}}
-            <li>
-              <div class="post">
-                <h2 class="post_title">{{ this.title }}</h2>
-                <p class="post_metadata">posted by {{ this.poster }} at {{ this.post_time }}</p>
-                <p class="post_updated">last updated at {{ this.update_time }}</p>
-                <p class="post_content">{{ this.content }}</p>
-                <ol class="reactions">
-                  {{#each this.reactions}}
-                    <li><p class="reaction">{{ this.name }} - {{ this.count }}</p></li>
-                  {{/each}}
-                </ol>
-                <ol class="attachments">
-                  {{#each this.attachments}}
-                    <li><img class = "attachment" src="{{ this.source }}" alt="{{ this.alt }}"></li>
-                  {{/each}}
-                </ol>
-                <a data-method="delete" href="/posts/{{ this._id }}" data-confirm="Are you sure?" rel="nofollow">Delete post</a>
-              </div>
-            </li>
-        {{/each}}
-      </ol>
-    </section>
-    <section id="change-password-section">
-      <h2>Change Password</h2>
-      <form
-        id="change-password-form"
-        onsubmit="updateUserPassword(event)">
-        <label for="currentPasswordInput">Current Password:</label>
-        <input id="currentPasswordInput" type="password" name="currentPassword" />
-        <label for="newPasswordInput">New Password:</label>
-        <input id="newPasswordInput" type="password" name="newPassword" />
-        <label for="newPasswordAgainInput">New Password Again:</label>
-        <input id="newPasswordAgainInput" type="password" name="newPasswordAgain" />
-        <input type="submit" value="Update" />
-      </form>
-    </section>
-    <section id="change-picture-section">
-      <h2>Change Profile Picture</h2>
-      <form
-        id="change-profile-picture"
-        onsubmit="updateUserPicture(event)">
-        <label for="profilePictureInput">New Profile Picture:</label>
-        <input id="profilePictureInput" accept="image/*" type="file" />
-        <input type="submit" value="Update" />
-      </form>
-    </section>
-    <section id="change-email-section">
-      <h2>Change Email</h2>
-      <form
-        id="change-email"
-        onsubmit="updateUserEmail(event)">
-        <label for="emailInput">New Email:</label>
-        <input id="emailInput" type="email" name="newEmail" />
-        <input type="submit" value="Update" />
-      </form>
-    </section>
-    <section id="change-desc-section">
-      <h2>Change Description</h2>
-      <form
-        id="change-desc"
-        onsubmit="updateUserDesc(event)">
-        <label for="descInput">New Description:</label>
-        <input id="descInput" type="text" name="newDesc" />
-        <input type="submit" value="Update" />
-      </form>
-    </section>
+      </nav>
+      <section id="user-posts">
+        <ol id="post_list">
+          {{#each posts}}
+              <li>
+                <div class="post">
+                  <h2 class="post_title">{{ this.title }}</h2>
+                  <p class="post_metadata">posted by {{ this.poster }} at {{ this.post_time }}</p>
+                  <p class="post_updated">last updated at {{ this.update_time }}</p>
+                  <p class="post_content">{{ this.content }}</p>
+                  <ol class="reactions">
+                    {{#each this.reactions}}
+                      <li><p class="reaction">{{ this.name }} - {{ this.count }}</p></li>
+                    {{/each}}
+                  </ol>
+                  <ol class="attachments">
+                    {{#each this.attachments}}
+                      <li><img class = "attachment" src="{{ this.source }}" alt="{{ this.alt }}"></li>
+                    {{/each}}
+                  </ol>
+                  <a data-method="delete" href="/posts/{{ this._id }}" data-confirm="Are you sure?" rel="nofollow">Delete post</a>
+                </div>
+              </li>
+          {{/each}}
+        </ol>
+      </section>
+      <section id="change-password-section">
+        <h2>Change Password</h2>
+        <form
+          id="change-password-form"
+          onsubmit="updateUserPassword(event)">
+          <label for="currentPasswordInput">Current Password:</label>
+          <input id="currentPasswordInput" type="password" name="currentPassword" />
+          <label for="newPasswordInput">New Password:</label>
+          <input id="newPasswordInput" type="password" name="newPassword" />
+          <label for="newPasswordAgainInput">New Password Again:</label>
+          <input id="newPasswordAgainInput" type="password" name="newPasswordAgain" />
+          <input type="submit" value="Update" />
+        </form>
+      </section>
+      <section id="change-picture-section">
+        <h2>Change Profile Picture</h2>
+        <form
+          id="change-profile-picture"
+          onsubmit="updateUserPicture(event)">
+          <label for="profilePictureInput">New Profile Picture:</label>
+          <input id="profilePictureInput" accept="image/*" type="file" />
+          <input type="submit" value="Update" />
+        </form>
+      </section>
+      <section id="change-email-section">
+        <h2>Change Email</h2>
+        <form
+          id="change-email"
+          onsubmit="updateUserEmail(event)">
+          <label for="emailInput">New Email:</label>
+          <input id="emailInput" type="email" name="newEmail" />
+          <input type="submit" value="Update" />
+        </form>
+      </section>
+      <section id="change-desc-section">
+        <h2>Change Description</h2>
+        <form
+          id="change-desc"
+          onsubmit="updateUserDesc(event)">
+          <label for="descInput">New Description:</label>
+          <input id="descInput" type="text" name="newDesc" />
+          <input type="submit" value="Update" />
+        </form>
+      </section>
 
-    <section class="profile_errors">
-      <ul id="profile_error_list">
-      </ul>
-    </section>
-  </main>
+      <section class="profile_errors">
+        <ul id="profile_error_list">
+        </ul>
+      </section>
+    </main>
+  {{else}}
+    <header class="profile_header">
+      <h1>Profile - {{user.username}}</h1>
+    </header>
+    <main class="profile_content">
+      <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">LIEB Floorplan</a>
+          </div>
+          <div class="collapse navbar-collapse" id="myNavbar">
+            <ul class="nav navbar-nav">
+              <li><a href="/">Home</a></li>
+              <li><a href="/messages/{{ user.username }}">Messages</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+              <li class="active"><a href="/users/{{ user.username }}"><span class="glyphicon glyphicon-user"></span> My Profile</a></li>
+              <li><a href="/logout"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+      <section class="user_buttons">
+        <ul id="user_button_list">
+          {{#if subscribed }}
+            <li><form action="/users/{{user.username}}/unsub">
+              <input type="submit" value="Unsubscribe" />
+              </form></li>
+          {{else}}
+            <li><form action="/users/{{user.username}}/sub">
+              <input type="submit" value="Subscribe" />
+              </form></li>
+          {{/if}}
+          <li><form action="/messages/{{user.username}}">
+            <input type="submit" value="Message" />
+            </form>
+          </li>
+        </ul>
+      </section>
+      <section class="user_info">
+        <ul id="user_info_list">
+          <li>Email: {{ user.email }}</li>
+          <li>Description: {{ user.desc }}</li>
+        </ul>
+      </section>
+    </main>
+
+  {{/if}}
 {{else}}
   <header class="profile_header">
     <h1>Profile - {{missingUser}}</h1>

@@ -63,9 +63,8 @@ async function updatePassword (user, newPassword) {
 
     try {
         let res = await users.updateOne({ username: user}, { $set: { password: hash }});
-        return res.modifiedCount > 0;
+        return res.nModified > 0;
     } catch (ex) {
-        console.log(ex);
         return false;
     }
 }
@@ -76,7 +75,7 @@ async function updateUserProfile (user, newProfile) {
 
     try {
         let res = await users.updateOne({ username: user }, { $set: newProfile });
-        return res.modifiedCount > 0;
+        return res.nModified > 0;
     } catch (ex) {
         return false;
     }
@@ -153,9 +152,11 @@ async function addSubscription (username, userToSub) {
     const users = await mongo("users");
 
     try {
+        console.log("adding");
         let res = await users.update({"username" : username}, {"$push" : {"subscriptions" : userToSub}});
-        return res.modifiedCount > 0;
+        return res.nModified > 0;
     } catch (ex) {
+        console.log(ex);
         return false;
     }
 }
@@ -172,8 +173,9 @@ async function removeSubscription (username, userToUnsub) {
     // Remove the item
     try {
         let res = await users.update({"username" : username}, {"$pull" : {"subscriptions" : userToUnsub}});
-        return res.modifiedCount > 0;
+        return res.nModified > 0;
     } catch (ex) {
+        console.log(ex);
         return false;
     }
 }

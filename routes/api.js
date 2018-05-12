@@ -67,6 +67,29 @@ module.exports = app => {
     } else res.status(500).json({err: "deletion is not authorized"});
   });
 
+  app.get("/users/:username/sub", async (req, res) => {
+    const user = req.currentUser;
+
+    try {
+      await users.addSubscription(user.username, req.params.username);
+      res.redirect('/users/' + req.params.username);
+    } catch (e) {
+      console.log(e);
+      res.redirect('/users/' + req.params.username);
+    }
+  });
+
+  app.get("/users/:username/unsub", async (req, res) => {
+    const user = req.currentUser;
+
+    try {
+      await users.removeSubscription(user.username, req.params.username);
+      res.redirect('/users/' + req.params.username);
+    } catch (e) {
+      res.redirect('/users/' + req.params.username);
+    }
+  });
+
   // Messages
   app.post("/messages/:toUser", (req, res) => {
     // TODO: create a new message from the currently logged in
