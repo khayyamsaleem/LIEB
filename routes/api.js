@@ -5,6 +5,7 @@ const middleware = require('../middleware');
 const messages = require('../messages');
 
 module.exports = app => {
+
   // Posts
   app.use("/posts", middleware.requireLoginApiMiddleware);
   app.post("/posts", async (req, res) => {
@@ -22,7 +23,6 @@ module.exports = app => {
     const chk = await posts.createPost(p)
     if (chk) {
       res.redirect('/');
-      // res.status(200).end()
     } else {
       res.status(500).json({err: "unable to add post to database"});
     }
@@ -59,8 +59,6 @@ module.exports = app => {
 
   app.use("/posts", middleware.requireLoginApiMiddleware);
   app.get("/posts/:postId", async (req, res) => {
-    console.log("Deleting post", req.params.postId);
-
     const user = req.currentUser;
     const post = await posts.getPostById(req.params.postId);
 
@@ -79,7 +77,6 @@ module.exports = app => {
       await users.addSubscription(user.username, req.params.username);
       res.redirect('/users/' + req.params.username);
     } catch (e) {
-      console.log(e);
       res.redirect('/users/' + req.params.username);
     }
   });
@@ -95,25 +92,12 @@ module.exports = app => {
     }
   });
 
-  // Messages
-  app.post("/messages/:toUser", async (req, res) => {
-    // TODO: create a new message from the currently logged in
-    // user to the user in the url
-    res.render('/messages', {
-        user: req.currentUser.username,
-        other_user: req.params.toUser,
-        messages_list: await messages.getMessagesConcerningUsers(req.currentUser.username, req.params.toUser)
-    })
-  });
-
   app.post("/create_message/:toUser", async (req, res) => {
     const msg = req.body.content;
     const u_id = req.currentUser.username;
     const o_id = req.params.toUser;
-    console.log(req.currentUser.username, "sending msg to", req.params.toUser);
     const mshg = await messages.createMessage(msg, u_id, o_id);
-    console.log(await messages.getMessagesConcerningUsers(req.currentUser.username, req.params.toUser));
-    res.redirect("/messages/"+req.params.toUser);
+    res.redirect("/messages/" + req.params.toUser);
   })
 
   app.use("/updateEmail", middleware.requireLoginApiMiddleware);
@@ -205,7 +189,6 @@ module.exports = app => {
       errors.push('Password must match password confirmation');
     }
 
-    console.log(JSON.stringify(req.currentUser));
     const validPassword = await users.checkPassword(req.currentUser.username, currentPassword);
 
     if (!validPassword) {
@@ -220,7 +203,6 @@ module.exports = app => {
       try {
         const updateSuccess = await users.updatePassword(req.currentUser.username, newPassword);
         if (updateSuccess) {
-          console.log("success");
           res.status(200).json({
             message: "Password updated."
           });

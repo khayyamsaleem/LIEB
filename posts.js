@@ -34,7 +34,6 @@ async function getPostsBySubscriptions (subscriptions) {
     // Get the user collection
     const posts = await mongo("posts");
 
-    console.log(subscriptions);
     // Gather all posts
     let postsBySubscriptions = await posts.find({"poster" : {"$in" : subscriptions}}).sort({"post_time" : 1}).toArray();
 
@@ -92,7 +91,6 @@ async function addReactionToPost (postId, username, reactionType) {
 
     const posts = await mongo("posts");
 
-    console.log(postId);
     // Add a new reaction to the list of reactions
     let post = await posts.findOne({"_id" : new mongodb.ObjectId(postId)});
 
@@ -104,7 +102,6 @@ async function addReactionToPost (postId, username, reactionType) {
       let res = await posts.updateOne({"_id": new mongodb.ObjectId(postId)}, { "$set": { "reactions": post.reactions }});
       return res.nModified > 0;
     } catch (ex) {
-      console.log(ex);
       return false;
     }
 }
