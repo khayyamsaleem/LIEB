@@ -136,8 +136,11 @@ function updateUserDesc (e) {
 
   const request = new Request('http://localhost:3000/updateDesc', {
     method: 'POST',
-    body: {
+    body: JSON.stringify({
       newDesc: desc
+    }),
+    headers: {
+      'content-type': 'application/json'
     },
     credentials: 'same-origin'
   });

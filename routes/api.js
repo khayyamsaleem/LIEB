@@ -187,7 +187,6 @@ module.exports = app => {
 
   app.use("/updatePassword", middleware.requireLoginApiMiddleware);
   app.post("/updatePassword", async (req, res) => {
-    console.log(JSON.stringify(req.body));
     const currentPassword = req.body.currentPassword;
     const newPassword = req.body.newPassword;
     const newPasswordAgain = req.body.newPasswordAgain;
