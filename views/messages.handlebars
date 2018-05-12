@@ -15,10 +15,10 @@
       <div class="collapse navbar-collapse" id="myNavbar">
         <ul class="nav navbar-nav">
           <li><a href="/">Home</a></li>
-          <li class="active"><a href="#">Messages</a></li>
+          <li class="active"><a href="/all_users">All Users</a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
-          <li><a href="/users/{{ user.username }}"><span class="glyphicon glyphicon-user"></span> My Profile</a></li>
+          <li><a href="/users/{{ user.username }}"><span class="glyphicon glyphicon-user"></span> Profile</a></li>
           <li><a href="/logout"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
         </ul>
       </div>
@@ -34,11 +34,20 @@
               class="message_other"
             {{/if}}
           >
-            <h2 class="message_title">{{ this.title }}</h2>
             <p class="message_metadata">sent at {{ this.send_time }}</p>
             <p class="message_content">{{ this.content }}</p>
           </div>
         </li>
     {{/each}}
   </ol>
+  <>
+    <form
+      id="create-msg"
+      method="post"
+      action="/create_message/{{ other_user }}"
+      encType="multipart/form-data">
+        <label for="contentInput">CONTENT:</label>
+        <input id="contentInput" type="text" name="content" />
+        <input type="submit" value="create" />
+    </form>
 </main>
